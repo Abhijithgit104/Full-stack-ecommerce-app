@@ -18,6 +18,24 @@ services:
       - key: ALLOWED_HOSTS
         value: ".render.com"
 
+  - type: static
+    name: ecomm-frontend
+    env: static
+    rootDir: frontend
+    buildCommand: "npm install && npm run build"
+    publishDir: dist
+    plan: free
+    routes:
+      - type: rewrite
+        source: "/*"
+        destination: "/index.html"
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: ecomm-backend
+          property: host
+
 databases:
   - name: ecomm-db
     plan: free
