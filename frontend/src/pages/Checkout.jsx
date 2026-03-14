@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import axios from 'axios';
+import { useSelector } from 'react-redux';
+import api from '../services/api';
 import { useNavigate } from 'react-router-dom';
 
 const Checkout = () => {
@@ -14,9 +14,7 @@ const Checkout = () => {
   const handlePlaceOrder = async () => {
     setLoading(true);
     try {
-      await axios.post('http://127.0.0.1:8000/orders/', {}, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      await api.post('/orders/', {});
       alert("Order placed successfully!");
       navigate('/orders');
     } catch (err) {

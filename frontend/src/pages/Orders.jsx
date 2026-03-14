@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../services/api';
 import { useSelector } from 'react-redux';
 
 const Orders = () => {
@@ -8,9 +8,7 @@ const Orders = () => {
 
   useEffect(() => {
     const fetchOrders = async () => {
-      const response = await axios.get('http://127.0.0.1:8000/orders/', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const response = await api.get('/orders/');
       setOrders(response.data);
     };
     if (token) fetchOrders();
