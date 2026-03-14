@@ -20,31 +20,17 @@ function App() {
   const [showWakeUpBanner, setShowWakeUpBanner] = useState(false);
 
   useEffect(() => {
-    let bannerTimer;
-    let cancelled = false;
+    // Fire-and-forget: wake up Render's sleeping server without blocking the app.
+    // mode:'no-cors' skips the CORS preflight so it works even while server sleeps.
+    fetch(`${API_BASE_URL}/products/`, { mode: 'no-cors' }).catch(() => {});
 
-    // Show banner after 1.5s if backend hasn't responded
-    bannerTimer = setTimeout(() => setShowWakeUpBanner(true), 1500);
-
-    const wakeUp = async () => {
-      try {
-        // no-cors bypasses CORS preflight — safely wakes Render's sleeping server
-        await fetch(`${API_BASE_URL}/products/`, { mode: 'no-cors' });
-      } catch (_) {
-        // Ignore — wake-up attempt done regardless
-      } finally {
-        if (!cancelled) {
-          clearTimeout(bannerTimer);
-          setShowWakeUpBanner(false);
-        }
-      }
-    };
-
-    wakeUp();
+    // Show informational banner after 1.5s, auto-hide after 70s
+    const showTimer = setTimeout(() => setShowWakeUpBanner(true), 1500);
+    const hideTimer = setTimeout(() => setShowWakeUpBanner(false), 70000);
 
     return () => {
-      cancelled = true;
-      clearTimeout(bannerTimer);
+      clearTimeout(showTimer);
+      clearTimeout(hideTimer);
     };
   }, []); // Runs once on mount only
 
@@ -52,7 +38,7 @@ function App() {
     <Router>
       <div className="App">
 
-        {/* Cold-start banner for Render free tier */}
+        {/* Cold-start informational banner */}
         {showWakeUpBanner && (
           <div
             className="d-flex align-items-center justify-content-center gap-2 text-white py-2 px-3 text-center"
@@ -63,8 +49,14 @@ function App() {
               style={{ width: '14px', height: '14px', borderWidth: '2px' }}
             ></span>
             <span>
-              ⚡ Server is waking up (free tier) — first load may take <strong>30–60 seconds</strong>. Please wait…
+              ⚡ Backend is waking up (free tier cold start). Products &amp; login will load shortly — <strong>please wait</strong>…
             </span>
+            <button
+              className="btn-close btn-close-white ms-2"
+              style={{ fontSize: '10px' }}
+              onClick={() => setShowWakeUpBanner(false)}
+              aria-label="Dismiss"
+            ></button>
           </div>
         )}
 
