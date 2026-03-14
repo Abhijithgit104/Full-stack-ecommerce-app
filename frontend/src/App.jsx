@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
@@ -12,10 +12,29 @@ import Category from './pages/Category';
 import Success from './pages/Success';
 import { useSelector } from 'react-redux';
 import { ServerProvider, useServer } from './context/ServerContext';
+import { useEffect } from 'react';
 
 function AppRoutes() {
   const { token } = useSelector((state) => state.auth);
   const { serverReady } = useServer();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    console.log("DEBUG: Current Auth State - Token exists:", !!token);
+    console.log("DEBUG: Current Path:", location.pathname);
+
+    // If no token and not on login/register, push to login
+    if (!token && location.pathname !== '/login' && location.pathname !== '/register') {
+      console.log("DEBUG: Redirecting to /login...");
+      navigate('/login', { replace: true });
+    }
+    // If token and on login/register, push to home
+    if (token && (location.pathname === '/login' || location.pathname === '/register')) {
+      console.log("DEBUG: Already logged in, redirecting to /");
+      navigate('/', { replace: true });
+    }
+  }, [token, location.pathname, navigate]);
 
   return (
     <div className="App">
