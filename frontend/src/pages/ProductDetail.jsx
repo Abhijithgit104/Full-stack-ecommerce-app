@@ -3,7 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProductDetail } from '../store/productSlice';
 import { addToCart } from '../store/cartSlice';
-import { Star, Check, ChevronRight, Settings2, Plus, Minus } from 'lucide-react';
+import { Star, Check, ChevronRight, ChevronDown, Settings2, Plus, Minus } from 'lucide-react';
 import ProductSection from '../components/ProductSection';
 import Toast from '../components/Toast';
 import { useServer } from '../context/ServerContext';
