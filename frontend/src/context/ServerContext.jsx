@@ -5,6 +5,7 @@ const ServerContext = createContext({ serverReady: false });
 export const useServer = () => useContext(ServerContext);
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+console.log("DEBUG: Connecting to Backend at:", API_BASE_URL);
 
 export function ServerProvider({ children }) {
   const [serverReady, setServerReady] = useState(false);
@@ -19,10 +20,14 @@ export function ServerProvider({ children }) {
     // Step 2: Poll /health/ endpoint. This endpoint checks DB connectivity.
     // It only returns 200 OK when the server AND the database are both ready.
     const checkReady = async () => {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 4000);
+      
       try {
         const res = await fetch(`${API_BASE_URL}/health/?check=${Date.now()}`, {
-          signal: AbortSignal.timeout(4000), 
+          signal: controller.signal, 
         });
+        clearTimeout(timeoutId);
         
         // We only mark ready if we get a successful JSON response
         if (res.ok) {

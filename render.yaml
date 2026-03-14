@@ -2,7 +2,7 @@ services:
   - type: web
     name: ecomm-api
     env: python
-    buildCommand: "./build.sh"
+    buildCommand: "sed -i 's/\\r$//' build.sh && bash build.sh"
     startCommand: "gunicorn ecomm.wsgi:application --preload --workers 1 --threads 4 --timeout 120 --keep-alive 5"
     rootDir: backend
     plan: free
