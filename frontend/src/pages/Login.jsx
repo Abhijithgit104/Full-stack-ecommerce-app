@@ -16,21 +16,24 @@ const Login = () => {
   };
 
   return (
-    <div className="auth-wrapper">
-      <div className="auth-card animate-fade-in">
-        <div className="auth-header">
-          <h1 className="logo">SHOP.CO</h1>
-          <h2>Welcome Back</h2>
-          <p>Please enter your details to sign in</p>
+    <div className="min-vh-100 d-flex align-items-center justify-content-center bg-light p-3">
+      <div className="bg-white p-4 p-md-5 rounded-4 shadow-sm w-100 animate-fade-in" style={{ maxWidth: '450px' }}>
+        <div className="text-center mb-5">
+          <h1 className="fw-bolder mb-4 font-heading" style={{ fontSize: '32px', fontFamily: 'Outfit, sans-serif' }}>SHOP.CO</h1>
+          <h2 className="fs-3 fw-bold mb-2">Welcome Back</h2>
+          <p className="text-muted-custom fs-6 mb-0">Please enter your details to sign in</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="auth-form">
-          <div className="input-group">
-            <label>Username</label>
-            <div className="input-field">
-              <Mail size={18} />
+        <form onSubmit={handleSubmit} className="d-flex flex-column gap-4">
+          <div>
+            <label className="form-label fw-medium text-black fs-6 mb-2">Username</label>
+            <div className="input-group bg-light rounded-pill p-1 border border-transparent focus-within-border-black transition-all">
+              <span className="input-group-text bg-transparent border-0 pe-2 ps-3 text-muted-custom">
+                <Mail size={18} />
+              </span>
               <input 
                 type="text" 
+                className="form-control bg-transparent border-0 shadow-none ps-0 fs-6" 
                 placeholder="Enter your username" 
                 required
                 onChange={(e) => setCredentials({ ...credentials, username: e.target.value })} 
@@ -38,12 +41,15 @@ const Login = () => {
             </div>
           </div>
 
-          <div className="input-group">
-            <label>Password</label>
-            <div className="input-field">
-              <Lock size={18} />
+          <div>
+            <label className="form-label fw-medium text-black fs-6 mb-2">Password</label>
+            <div className="input-group bg-light rounded-pill p-1 border border-transparent focus-within-border-black transition-all">
+              <span className="input-group-text bg-transparent border-0 pe-2 ps-3 text-muted-custom">
+                <Lock size={18} />
+              </span>
               <input 
                 type="password" 
+                className="form-control bg-transparent border-0 shadow-none ps-0 fs-6" 
                 placeholder="••••••••" 
                 required
                 onChange={(e) => setCredentials({ ...credentials, password: e.target.value })} 
@@ -51,11 +57,11 @@ const Login = () => {
             </div>
           </div>
 
-          {error && <div className="error-message">Invalid username or password. Please try again.</div>}
+          {error && <div className="p-3 rounded-4 bg-danger bg-opacity-10 text-danger text-center fs-6 fw-medium">Invalid username or password. Please try again.</div>}
 
-          <button type="submit" className="auth-btn" disabled={loading}>
+          <button type="submit" className="btn btn-black rounded-pill py-3 px-4 fs-6 fw-semibold d-flex align-items-center justify-content-center gap-2 mt-2" disabled={loading}>
             {loading ? (
-              <span className="spinner"></span>
+              <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
             ) : (
               <>
                 Sign In <LogIn size={18} />
@@ -64,141 +70,17 @@ const Login = () => {
           </button>
         </form>
 
-        <div className="auth-footer">
-          <p>Don't have an account? <Link to="/register">Create an account</Link></p>
+        <div className="text-center mt-4 pt-3 fs-6">
+          <p className="text-muted-custom mb-0">Don't have an account? <Link to="/register" className="text-black fw-semibold ms-1" style={{ textDecoration: 'underline' }}>Create an account</Link></p>
         </div>
       </div>
 
       <style>{`
-        .auth-wrapper {
-          min-height: 100vh;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background-color: #F0F0F0;
-          padding: 20px;
-        }
-        .auth-card {
-          background: white;
-          width: 100%;
-          max-width: 450px;
-          padding: 48px;
-          border-radius: 20px;
-          box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-        }
-        .auth-header {
-          text-align: center;
-          margin-bottom: 32px;
-        }
-        .auth-header .logo {
-          font-size: 32px;
-          font-weight: 800;
-          margin-bottom: 16px;
-        }
-        .auth-header h2 {
-          font-size: 24px;
-          font-weight: 700;
-          margin-bottom: 8px;
-        }
-        .auth-header p {
-          color: rgba(0,0,0,0.5);
-          font-size: 14px;
-        }
-        .auth-form {
-          display: flex;
-          flex-direction: column;
-          gap: 20px;
-        }
-        .input-group label {
-          display: block;
-          font-size: 14px;
-          font-weight: 500;
-          margin-bottom: 8px;
-          color: #000;
-        }
-        .input-field {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          background: #F0F0F0;
-          border-radius: 62px;
-          padding: 12px 20px;
-          border: 1px solid transparent;
-          transition: 0.2s;
-        }
-        .input-field:focus-within {
-          border-color: #000;
-          background: white;
-        }
-        .input-field input {
-          background: transparent;
-          border: none;
-          outline: none;
-          width: 100%;
-          font-size: 16px;
-        }
-        .input-field svg {
-          color: rgba(0,0,0,0.4);
-        }
-        .error-message {
-          background: rgba(255, 51, 51, 0.1);
-          color: #FF3333;
-          padding: 12px;
-          border-radius: 12px;
-          font-size: 13px;
-          text-align: center;
-        }
-        .auth-btn {
-          background: #000;
-          color: #fff;
-          border: none;
-          border-radius: 62px;
-          padding: 16px;
-          font-size: 16px;
-          font-weight: 600;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 8px;
-          transition: 0.2s;
-          margin-top: 10px;
-        }
-        .auth-btn:hover {
-          background: #333;
-        }
-        .auth-btn:disabled {
-          opacity: 0.7;
-          cursor: not-allowed;
-        }
-        .auth-footer {
-          margin-top: 32px;
-          text-align: center;
-          font-size: 14px;
-        }
-        .auth-footer a {
-          color: #000;
-          font-weight: 600;
-          text-decoration: underline;
-        }
-        .spinner {
-          width: 20px;
-          height: 20px;
-          border: 2px solid rgba(255,255,255,0.3);
-          border-radius: 50%;
-          border-top-color: #fff;
-          animation: spin 0.8s linear infinite;
-        }
-        @keyframes spin {
-          to { transform: rotate(360deg); }
-        }
-        @keyframes fade-in {
-          from { opacity: 0; transform: translateY(10px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade-in {
-          animation: fade-in 0.5s ease forwards;
-        }
+        .focus-within-border-black:focus-within { border-color: #000 !important; background-color: #fff !important; }
+        .transition-all { transition: all 0.2s ease-in-out; }
+        .border-transparent { border-color: transparent !important; }
+        .animate-fade-in { animation: fade-in 0.5s ease forwards; }
+        @keyframes fade-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
       `}</style>
     </div>
   );

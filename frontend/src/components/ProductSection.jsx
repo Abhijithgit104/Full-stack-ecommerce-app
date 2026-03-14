@@ -25,58 +25,32 @@ const ProductSection = ({ title, endpoint, showTitle = true }) => {
   }, [endpoint]);
 
   return (
-    <section className="product-section section-padding">
+    <section className="py-5">
       <div className="container">
-        {showTitle && <h2 className="heading-md text-center">{title}</h2>}
+        {showTitle && <h2 className="text-center mb-5 fw-bolder" style={{ fontSize: 'clamp(32px, 5vw, 48px)', fontFamily: 'Outfit, sans-serif' }}>{title}</h2>}
         {loading ? (
-          <div className="loading">Loading products...</div>
+          <div className="text-center text-secondary py-5">Loading products...</div>
         ) : (
-          <div className="products-grid">
+          <div className="row g-4 mb-5">
             {Array.isArray(products) && products.map(product => (
-              <ProductCard key={product.id} product={product} />
+              <div key={product.id} className="col-12 col-sm-6 col-md-4 col-lg-3 d-flex align-items-stretch">
+                <ProductCard product={product} />
+              </div>
             ))}
           </div>
         )}
-        <div className="view-all-wrap">
+        <div className="text-center">
           <Link 
             to={`/category/category/${endpoint.replace('/', '')}`} 
-            className="btn-outline" 
-            style={{ textDecoration: 'none', display: 'inline-block' }}
+            className="btn btn-outline-dark rounded-pill px-5 py-3 fw-medium" 
           >
             View All
           </Link>
         </div>
       </div>
-
       <style>{`
-        .products-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-          gap: 20px;
-          margin-bottom: 36px;
-        }
-        .view-all-wrap {
-          text-align: center;
-        }
-        .btn-outline {
-          background: transparent;
-          border: 1px solid rgba(0,0,0,0.1);
-          padding: 16px 54px;
-          border-radius: 62px;
-          font-weight: 500;
-          font-size: 16px;
-          transition: var(--transition);
-        }
-        .btn-outline:hover {
-          background: var(--primary);
-          color: white;
-          border-color: var(--primary);
-        }
-        .loading {
-          text-align: center;
-          padding: 40px;
-          color: var(--text-muted);
-        }
+        .btn-outline-dark { border: 1px solid rgba(0,0,0,0.1); color: #000; }
+        .btn-outline-dark:hover { background-color: #000; color: #fff; border-color: #000; }
       `}</style>
     </section>
   );

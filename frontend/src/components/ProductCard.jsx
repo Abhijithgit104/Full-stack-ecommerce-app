@@ -3,10 +3,12 @@ import { Star } from 'lucide-react';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../store/cartSlice';
 import { useNavigate } from 'react-router-dom';
+import Toast from './Toast';
 
 const ProductCard = ({ product }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [showToast, setShowToast] = React.useState(false);
 
   const renderStars = (rating) => {
     return (
@@ -25,114 +27,49 @@ const ProductCard = ({ product }) => {
   };
 
   return (
-    <div className="product-card" onClick={() => navigate(`/product/${product.id}`)}>
-      <div className="product-image-wrap">
-        <img src={product.image} alt={product.name} className="product-image" />
+    <div className="card border-0 h-100 product-card-hover" style={{ cursor: 'pointer', transition: '0.3s' }} onClick={() => navigate(`/product/${product.id}`)}>
+      <div className="rounded-4 overflow-hidden mb-3" style={{ background: '#F0EEED', aspectRatio: '1/1.1' }}>
+        <img src={product.image} alt={product.name} className="w-100 h-100 object-fit-cover" />
       </div>
-      <h3 className="product-name">{product.name}</h3>
+      <h3 className="fs-5 fw-bold mb-2 text-truncate">{product.name}</h3>
       {renderStars(product.rating)}
-      <div className="product-pricing">
-        <span className="current-price">${product.price}</span>
+      <div className="d-flex align-items-center gap-2 mb-3">
+        <span className="fs-4 fw-bold">${product.price}</span>
         {product.old_price && (
           <>
-            <span className="old-price">${product.old_price}</span>
-            <span className="discount-tag">
+            <span className="fs-4 fw-bold text-decoration-line-through text-black-50">${product.old_price}</span>
+            <span className="badge rounded-pill fw-medium" style={{ background: 'rgba(255, 51, 51, 0.1)', color: '#FF3333', fontSize: '12px', padding: '6px 14px' }}>
               -{Math.round(((product.old_price - product.price) / product.old_price) * 100)}%
             </span>
           </>
         )}
       </div>
-      <button 
-        className="add-to-cart-btn" 
-        onClick={(e) => {
-          e.stopPropagation();
-          dispatch(addToCart({ product: product.id, quantity: 1 }));
-        }}
-      >
-        Add to Cart
-      </button>
+      <div className="mt-auto">
+        <button 
+          className="btn btn-black w-100 rounded-pill fw-medium py-2" 
+          onClick={(e) => {
+            e.stopPropagation();
+            dispatch(addToCart({ product: product.id, quantity: 1 }));
+            setShowToast(true);
+          }}
+        >
+          Add to Cart
+        </button>
+      </div>
 
       <style>{`
-        .product-card {
-          flex: 1;
-          min-width: 250px;
-          cursor: pointer;
-          transition: 0.3s;
-          position: relative;
-        }
-        .product-card:hover {
+        .product-card-hover:hover {
           transform: translateY(-5px);
         }
-        .product-image-wrap {
-          background: #F0EEED;
-          border-radius: 20px;
-          aspect-ratio: 1/1.1;
-          overflow: hidden;
-          margin-bottom: 16px;
-        }
-        .product-image {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
-        .product-name {
-          font-size: 18px;
-          font-weight: 700;
-          margin-bottom: 8px;
-        }
-        .stars {
-          display: flex;
-          align-items: center;
-          gap: 4px;
-          margin-bottom: 8px;
-        }
-        .rating-text {
-          font-size: 14px;
-          margin-left: 8px;
-          font-weight: 500;
-        }
-        .rating-total {
-          color: #999;
-        }
-        .product-pricing {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          margin-bottom: 10px;
-        }
-        .current-price {
-          font-size: 24px;
-          font-weight: 700;
-        }
-        .old-price {
-          font-size: 24px;
-          font-weight: 700;
-          color: rgba(0,0,0,0.3);
-          text-decoration: line-through;
-        }
-        .discount-tag {
-          background: rgba(255, 51, 51, 0.1);
-          color: #FF3333;
-          padding: 6px 14px;
-          border-radius: 62px;
-          font-size: 12px;
-          font-weight: 500;
-        }
-        .add-to-cart-btn {
-          width: 100%;
-          padding: 12px;
-          background: #000;
-          color: #fff;
-          border: none;
-          border-radius: 62px;
-          cursor: pointer;
-          font-weight: 500;
-          transition: 0.3s;
-        }
-        .add-to-cart-btn:hover {
-          background: #333;
-        }
+        .stars { display: flex; align-items: center; gap: 4px; margin-bottom: 8px; }
+        .rating-text { font-size: 14px; margin-left: 8px; font-weight: 500; }
+        .rating-total { color: #999; }
       `}</style>
+      <Toast 
+        message={`${product.name} added to cart!`} 
+        show={showToast} 
+        onClose={() => setShowToast(false)} 
+      />
     </div>
   );
 };

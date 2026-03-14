@@ -1,22 +1,25 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import api from '../services/api';
 import { useNavigate } from 'react-router-dom';
+import { clearCart } from '../store/cartSlice';
 
 const Checkout = () => {
   const { items } = useSelector((state) => state.cart);
   const { token } = useSelector((state) => state.auth);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
 
-  const total = items.reduce((acc, item) => acc + item.product_details.price * item.quantity, 0);
+  const total = items.reduce((acc, item) => acc + (item.product_details?.price || 0) * item.quantity, 0);
 
   const handlePlaceOrder = async () => {
+    if (items.length === 0) return alert("Your cart is empty");
     setLoading(true);
     try {
       await api.post('/orders/', {});
-      alert("Order placed successfully!");
-      navigate('/orders');
+      dispatch(clearCart());
+      navigate('/success');
     } catch (err) {
       alert("Failed to place order.");
     } finally {
@@ -25,43 +28,57 @@ const Checkout = () => {
   };
 
   return (
-    <div className="checkout-page">
-      <h1>Checkout</h1>
-      <div className="checkout-container">
-        <div className="shipping-info">
-          <h3>Shipping Details</h3>
-          <input type="text" placeholder="Full Name" />
-          <input type="text" placeholder="Address" />
-          <input type="text" placeholder="City" />
-        </div>
-        <div className="order-summary-box">
-          <h3>Order Summary</h3>
-          {items.map(item => (
-            <div key={item.id} className="summary-item">
-              <span>{item.product_details.name} x {item.quantity}</span>
-              <span>${item.product_details.price * item.quantity}</span>
-            </div>
-          ))}
-          <hr />
-          <div className="total">
-            <span>Total</span>
-            <span>${total + 15}</span>
+    <div className="container py-5" style={{ maxWidth: '1000px' }}>
+      <h1 className="fw-bolder mb-5 heading-font" style={{ fontSize: 'clamp(32px, 5vw, 40px)', fontFamily: 'Outfit, sans-serif' }}>Checkout</h1>
+      
+      <div className="row g-5">
+        <div className="col-12 col-md-6 order-2 order-md-1">
+          <div className="d-flex flex-column gap-3">
+            <h3 className="fs-4 fw-bold mb-3 font-heading" style={{ fontFamily: 'Outfit, sans-serif' }}>Shipping Details</h3>
+            <input type="text" className="form-control p-3 rounded-3" placeholder="Full Name" />
+            <input type="text" className="form-control p-3 rounded-3" placeholder="Address" />
+            <input type="text" className="form-control p-3 rounded-3" placeholder="City" />
           </div>
-          <button onClick={handlePlaceOrder} disabled={loading}>
-            {loading ? 'Processing...' : 'Place Order'}
-          </button>
+        </div>
+        
+        <div className="col-12 col-md-6 order-1 order-md-2">
+          <div className="p-4 bg-light rounded-4 border border-secondary border-opacity-10">
+            <h3 className="fs-4 fw-bold mb-4 font-heading" style={{ fontFamily: 'Outfit, sans-serif' }}>Order Summary</h3>
+            
+            <div className="d-flex flex-column gap-3">
+              {items.map(item => (
+                <div key={item.id} className="d-flex justify-content-between align-items-center">
+                  <div className="d-flex align-items-center gap-3">
+                    <div className="bg-white rounded-3 border border-secondary border-opacity-10 overflow-hidden flex-shrink-0" style={{ width: '64px', height: '64px' }}>
+                      <img src={item.product_details?.image} alt={item.product_details?.name} className="w-100 h-100 object-fit-cover" />
+                    </div>
+                    <div>
+                       <p className="fw-bold fs-6 m-0 text-truncate" style={{ maxWidth: '150px' }}>{item.product_details.name}</p>
+                       <p className="text-muted-custom small m-0 mt-1">Qty: {item.quantity}</p>
+                    </div>
+                  </div>
+                  <span className="fw-bold fs-6 text-nowrap pl-2">${item.product_details.price * item.quantity}</span>
+                </div>
+              ))}
+            </div>
+            
+            <hr className="my-4 text-secondary opacity-25" />
+            
+            <div className="d-flex justify-content-between align-items-center fw-bolder fs-5 mt-4">
+              <span>Total</span>
+              <span>${total + 15}</span>
+            </div>
+            
+            <button 
+              className="btn btn-black w-100 rounded-pill py-3 mt-4 fw-semibold" 
+              onClick={handlePlaceOrder} 
+              disabled={loading}
+            >
+              {loading ? 'Processing...' : 'Place Order'}
+            </button>
+          </div>
         </div>
       </div>
-      <style>{`
-        .checkout-page { max-width: 1000px; margin: 40px auto; padding: 20px; }
-        .checkout-container { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
-        .shipping-info { display: flex; flex-direction: column; gap: 15px; }
-        .shipping-info input { padding: 12px; border: 1px solid #ddd; border-radius: 8px; }
-        .order-summary-box { padding: 20px; background: #f9f9f9; border-radius: 12px; }
-        .summary-item { display: flex; justify-content: space-between; margin-bottom: 10px; }
-        .total { display: flex; justify-content: space-between; font-weight: bold; font-size: 18px; margin-top: 15px; }
-        .order-summary-box button { width: 100%; padding: 15px; background: #000; color: #fff; border: none; border-radius: 8px; margin-top: 20px; cursor: pointer; }
-      `}</style>
     </div>
   );
 };

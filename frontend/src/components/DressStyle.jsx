@@ -10,76 +10,68 @@ const DressStyle = () => {
   ];
 
   return (
-    <section className="dress-style section-padding">
-      <div className="container style-container">
-        <h2 className="heading-md text-center">BROWSE BY DRESS STYLE</h2>
-        <div className="style-grid">
-          {styles.map((style, index) => (
+    <section className="py-5">
+      <div className="container bg-secondary-custom rounded-5 p-4 p-md-5">
+        <h2 className="text-center mb-4 pb-2 fw-bolder" style={{ fontSize: 'clamp(28px, 4vw, 48px)', fontFamily: 'Outfit, sans-serif' }}>BROWSE BY DRESS STYLE</h2>
+        <div className="row g-4">
+          <div className="col-12 col-md-4">
             <Link 
-              key={index} 
-              to={`/category/style/${style.name.toLowerCase()}`}
-              className={`style-card ${style.large ? 'large' : ''}`}
-              style={{ backgroundImage: `url(${style.image})`, textDecoration: 'none' }}
+              to={`/category/style/${styles[0].name.toLowerCase()}`}
+              className="d-block rounded-4 overflow-hidden position-relative text-decoration-none style-card"
+              style={{ backgroundImage: `url(${styles[0].image})`, height: '289px' }}
             >
-              <h3>{style.name}</h3>
+              <h3 className="position-absolute top-0 start-0 m-4 text-black fw-bold" style={{ fontSize: '36px', zIndex: 2 }}>{styles[0].name}</h3>
+              <div className="position-absolute w-100 h-100 top-0 start-0 overlay"></div>
             </Link>
-          ))}
+          </div>
+          <div className="col-12 col-md-8">
+            <Link 
+              to={`/category/style/${styles[1].name.toLowerCase()}`}
+              className="d-block rounded-4 overflow-hidden position-relative text-decoration-none style-card"
+              style={{ backgroundImage: `url(${styles[1].image})`, height: '289px' }}
+            >
+              <h3 className="position-absolute top-0 start-0 m-4 text-black fw-bold" style={{ fontSize: '36px', zIndex: 2 }}>{styles[1].name}</h3>
+              <div className="position-absolute w-100 h-100 top-0 start-0 overlay"></div>
+            </Link>
+          </div>
+          <div className="col-12 col-md-8">
+            <Link 
+              to={`/category/style/${styles[2].name.toLowerCase()}`}
+              className="d-block rounded-4 overflow-hidden position-relative text-decoration-none style-card"
+              style={{ backgroundImage: `url(${styles[2].image})`, height: '289px' }}
+            >
+              <h3 className="position-absolute top-0 start-0 m-4 text-black fw-bold" style={{ fontSize: '36px', zIndex: 2 }}>{styles[2].name}</h3>
+              <div className="position-absolute w-100 h-100 top-0 start-0 overlay"></div>
+            </Link>
+          </div>
+          <div className="col-12 col-md-4">
+            <Link 
+              to={`/category/style/${styles[3].name.toLowerCase()}`}
+              className="d-block rounded-4 overflow-hidden position-relative text-decoration-none style-card"
+              style={{ backgroundImage: `url(${styles[3].image})`, height: '289px' }}
+            >
+              <h3 className="position-absolute top-0 start-0 m-4 text-black fw-bold" style={{ fontSize: '36px', zIndex: 2 }}>{styles[3].name}</h3>
+              <div className="position-absolute w-100 h-100 top-0 start-0 overlay"></div>
+            </Link>
+          </div>
         </div>
       </div>
 
       <style>{`
-        .style-container {
-          background: #F0F0F0;
-          border-radius: 40px;
-          padding: 70px 64px;
-        }
-        .style-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 20px;
-        }
         .style-card {
-          height: 289px;
-          border-radius: 20px;
           background-size: cover;
           background-position: center;
-          padding: 25px 36px;
-          position: relative;
-          cursor: pointer;
-          transition: var(--transition);
+          transition: transform 0.3s ease;
         }
-        .style-card::before {
-          content: '';
-          position: absolute;
-          top: 0; left: 0; right: 0; bottom: 0;
-          background: rgba(0,0,0,0.1);
-          border-radius: 20px;
-          transition: var(--transition);
+        .style-card:hover {
+          transform: scale(0.98);
         }
-        .style-card:hover::before {
-          background: rgba(0,0,0,0.2);
+        .overlay {
+          background: rgba(0,0,0,0.05);
+          transition: background 0.3s ease;
         }
-        .style-card h3 {
-          position: relative;
-          z-index: 1;
-          color: black;
-          font-size: 36px;
-          text-transform: capitalize;
-        }
-        .style-card.large {
-          grid-column: span 2;
-        }
-
-        @media (max-width: 992px) {
-          .style-grid {
-            grid-template-columns: 1fr;
-          }
-          .style-card.large {
-            grid-column: span 1;
-          }
-          .style-container {
-            padding: 40px 20px;
-          }
+        .style-card:hover .overlay {
+          background: rgba(0,0,0,0.15);
         }
       `}</style>
     </section>

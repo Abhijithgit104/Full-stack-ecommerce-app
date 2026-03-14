@@ -39,7 +39,7 @@ class OrderList(generics.ListAPIView):
     serializer_class = OrderSerializer
 
     def get_queryset(self):
-        return Order.objects.filter(user=self.user).order_by('-created_at')
+        return Order.objects.filter(user=self.request.user).order_by('-created_at')
 
     # Adding a checkout method for completeness
     def post(self, request):

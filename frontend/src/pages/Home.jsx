@@ -11,16 +11,10 @@ const Home = () => {
       <div id="new-arrivals">
         <ProductSection title="NEW ARRIVALS" endpoint="new-arrivals/" />
       </div>
-      <div className="container divider"></div>
+      <div className="container border-bottom border-secondary border-opacity-25"></div>
       <ProductSection title="TOP SELLING" endpoint="top-selling/" />
       <DressStyle />
       <Reviews />
-      <style>{`
-        .divider {
-          height: 1px;
-          background: rgba(0,0,0,0.1);
-        }
-      `}</style>
     </>
   );
 };

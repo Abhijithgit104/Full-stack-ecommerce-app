@@ -52,215 +52,181 @@ const Category = () => {
   const dressStyles = ['Casual', 'Formal', 'Party', 'Gym'];
 
   return (
-    <div className="category-page container">
+    <div className="container py-4 mb-5">
       {/* Breadcrumbs */}
-      <div className="breadcrumbs">
-        <Link to="/">Home</Link> <ChevronRight size={14} /> 
-        <span className="current">{value ? value.charAt(0).toUpperCase() + value.slice(1).replace('_', ' ') : 'Shop'}</span>
-      </div>
+      <nav aria-label="breadcrumb" className="mb-4 d-flex align-items-center gap-2 text-muted-custom fs-6">
+        <Link to="/" className="text-decoration-none text-muted-custom hover-text-black">Home</Link> 
+        <ChevronRight size={14} /> 
+        <span className="text-black fw-medium">{value ? value.charAt(0).toUpperCase() + value.slice(1).replace('_', ' ') : 'Shop'}</span>
+      </nav>
 
-      <div className="category-layout">
+      <div className="row g-4">
         {/* Sidebar Filters */}
-        <aside className="filters-sidebar">
-          <div className="filter-header">
-            <h3>Filters</h3>
-            <SlidersHorizontal size={20} />
-          </div>
-          
-          <hr className="divider" />
-          
-          <div className="filter-section">
-            {categories.map(cat => (
-              <div 
-                key={cat} 
-                className={`filter-item ${selectedType === cat ? 'active-filter' : ''}`}
-                onClick={() => setSelectedType(selectedType === cat ? null : cat)}
-              >
-                <span>{cat}</span>
-                <ChevronRight size={16} color="rgba(0,0,0,0.4)" />
-              </div>
-            ))}
-          </div>
-
-          <hr className="divider" />
-
-          <div className="filter-section">
-            <div className="section-title-wrap">
-              <h4>Price</h4>
-              <ChevronDown size={16} />
+        <aside className="col-12 col-lg-3 d-none d-lg-block">
+          <div className="border border-secondary border-opacity-25 rounded-4 p-4 sticky-top" style={{ top: '100px' }}>
+            <div className="d-flex justify-content-between align-items-center mb-4">
+              <h3 className="fs-5 fw-bold mb-0">Filters</h3>
+              <SlidersHorizontal size={20} className="text-muted-custom" />
             </div>
-            <div className="price-slider-wrap">
-              <input 
-                type="range" 
-                min="50" 
-                max="500" 
-                value={priceRange} 
-                onChange={(e) => setPriceRange(e.target.value)} 
-                className="slider"
-              />
-              <div className="price-labels">
-                <span>$50</span>
-                <span>${priceRange}</span>
-              </div>
-            </div>
-          </div>
-
-          <hr className="divider" />
-
-          <div className="filter-section">
-            <div className="section-title-wrap">
-              <h4>Colors</h4>
-              <ChevronDown size={16} />
-            </div>
-            <div className="colors-grid">
-              {colors.map(color => (
+            
+            <hr className="text-secondary opacity-25 my-4" />
+            
+            <div className="d-flex flex-column gap-3">
+              {categories.map(cat => (
                 <div 
-                  key={color} 
-                  className={`color-dot ${selectedColor === color ? 'active' : ''}`} 
-                  style={{ backgroundColor: color, border: color === '#FFFFFF' ? '1px solid #ddd' : 'none' }}
-                  onClick={() => setSelectedColor(selectedColor === color ? null : color)}
+                  key={cat} 
+                  className={`d-flex justify-content-between align-items-center cursor-pointer ${selectedType === cat ? 'text-black fw-bold' : 'text-muted-custom'}`}
+                  style={{ cursor: 'pointer', transition: '0.2s' }}
+                  onClick={() => setSelectedType(selectedType === cat ? null : cat)}
                 >
-                  {selectedColor === color && <Check size={14} color={color === '#FFFFFF' ? 'black' : 'white'} />}
+                  <span>{cat}</span>
+                  <ChevronRight size={16} className={`${selectedType === cat ? 'text-black' : 'text-muted-custom'}`} />
                 </div>
               ))}
             </div>
-          </div>
 
-          <hr className="divider" />
+            <hr className="text-secondary opacity-25 my-4" />
 
-          <div className="filter-section">
-            <div className="section-title-wrap">
-              <h4>Size</h4>
-              <ChevronDown size={16} />
+            <div className="d-flex flex-column gap-3">
+              <div className="d-flex justify-content-between align-items-center">
+                <h4 className="fs-5 fw-bold mb-0">Price</h4>
+                <ChevronDown size={16} />
+              </div>
+              <div className="mt-2">
+                <input 
+                  type="range" 
+                  className="form-range"
+                  min="50" 
+                  max="500" 
+                  value={priceRange} 
+                  onChange={(e) => setPriceRange(e.target.value)} 
+                />
+                <div className="d-flex justify-content-between mt-2 fw-medium">
+                  <span>$50</span>
+                  <span>${priceRange}</span>
+                </div>
+              </div>
             </div>
-            <div className="sizes-grid">
-              {sizes.map(size => (
-                <button 
-                  key={size} 
-                  className={`size-tag ${selectedSize === size ? 'active' : ''}`}
-                  onClick={() => setSelectedSize(selectedSize === size ? null : size)}
-                >
-                  {size}
-                </button>
+
+            <hr className="text-secondary opacity-25 my-4" />
+
+            <div className="d-flex flex-column gap-3">
+              <div className="d-flex justify-content-between align-items-center">
+                <h4 className="fs-5 fw-bold mb-0">Colors</h4>
+                <ChevronDown size={16} />
+              </div>
+              <div className="d-flex flex-wrap gap-2">
+                {colors.map(color => (
+                  <div 
+                    key={color} 
+                    className={`rounded-circle d-flex align-items-center justify-content-center cursor-pointer`} 
+                    style={{ 
+                      width: '37px', height: '37px', backgroundColor: color, 
+                      border: color === '#FFFFFF' ? '1px solid #ddd' : 'none',
+                      boxShadow: selectedColor === color ? `0 0 0 2px white, 0 0 0 4px #000` : 'none',
+                      transition: '0.2s',
+                      cursor: 'pointer'
+                    }}
+                    onClick={() => setSelectedColor(selectedColor === color ? null : color)}
+                  >
+                    {selectedColor === color && <Check size={14} color={color === '#FFFFFF' ? 'black' : 'white'} />}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <hr className="text-secondary opacity-25 my-4" />
+
+            <div className="d-flex flex-column gap-3">
+              <div className="d-flex justify-content-between align-items-center">
+                <h4 className="fs-5 fw-bold mb-0">Size</h4>
+                <ChevronDown size={16} />
+              </div>
+              <div className="d-flex flex-wrap gap-2">
+                {sizes.map(size => (
+                  <button 
+                    key={size} 
+                    className={`btn rounded-pill px-3 py-2 fs-6 ${selectedSize === size ? 'btn-black' : 'bg-secondary-custom text-muted-custom hover-bg-light'}`}
+                    style={{ border: 'none', cursor: 'pointer', transition: '0.2s' }}
+                    onClick={() => setSelectedSize(selectedSize === size ? null : size)}
+                  >
+                    {size}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <hr className="text-secondary opacity-25 my-4" />
+
+            <div className="d-flex flex-column gap-3">
+              <div className="d-flex justify-content-between align-items-center">
+                <h4 className="fs-5 fw-bold mb-0">Dress Style</h4>
+                <ChevronDown size={16} />
+              </div>
+              {dressStyles.map(ds => (
+                <Link key={ds} to={`/category/style/${ds.toLowerCase()}`} className="d-flex justify-content-between align-items-center text-muted-custom text-decoration-none hover-text-black">
+                  <span>{ds}</span>
+                  <ChevronRight size={16} />
+                </Link>
               ))}
             </div>
+
+            <button className="btn btn-black w-100 rounded-pill py-3 mt-4 fw-medium" onClick={fetchProducts}>Apply Filter</button>
           </div>
-
-          <hr className="divider" />
-
-          <div className="filter-section">
-            <div className="section-title-wrap">
-              <h4>Dress Style</h4>
-              <ChevronDown size={16} />
-            </div>
-            {dressStyles.map(ds => (
-              <Link key={ds} to={`/category/style/${ds.toLowerCase()}`} className="filter-item nav-link">
-                <span>{ds}</span>
-                <ChevronRight size={16} color="rgba(0,0,0,0.4)" />
-              </Link>
-            ))}
-          </div>
-
-          <button className="apply-filter-btn" onClick={fetchProducts}>Apply Filter</button>
         </aside>
 
         {/* Main Content */}
-        <main className="category-products">
-          <div className="products-header">
-            <h2>{value ? value.charAt(0).toUpperCase() + value.slice(1).replace('_', ' ') : 'All Products'}</h2>
-            <div className="header-controls">
-              <p>Showing 1-{products.length} of {products.length} Products</p>
-              <div className="sort-wrap">
-                Sort by: <strong>Most Popular</strong> <ChevronDown size={16} />
+        <main className="col-12 col-lg-9">
+          <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-end mb-4 gap-3">
+            <h2 className="fs-2 fw-bolder m-0">{value ? value.charAt(0).toUpperCase() + value.slice(1).replace('_', ' ') : 'All Products'}</h2>
+            <div className="d-flex flex-column flex-sm-row align-items-start align-items-sm-center gap-3 text-muted-custom fs-6">
+              <p className="m-0">Showing 1-{products.length} of {products.length} Products</p>
+              <div className="cursor-pointer d-flex align-items-center gap-1" style={{ cursor: 'pointer' }}>
+                <span className="d-none d-sm-inline">Sort by:</span> <strong className="text-black">Most Popular</strong> <ChevronDown size={16} className="text-black" />
               </div>
             </div>
           </div>
 
           {loading ? (
-            <div className="loading">Loading products...</div>
+            <div className="text-center py-5 text-muted-custom">Loading products...</div>
           ) : (
-            <div className="products-grid">
+            <div className="row g-4 mb-5">
               {Array.isArray(products) && products.map(product => (
-                <ProductCard key={product.id} product={product} />
+                <div key={product.id} className="col-12 col-sm-6 col-md-4 d-flex align-items-stretch">
+                  <ProductCard product={product} />
+                </div>
               ))}
-              {products.length === 0 && <p className="no-products">No products found in this category.</p>}
+              {products.length === 0 && <p className="text-center w-100 py-5 text-muted-custom">No products found in this category.</p>}
             </div>
           )}
 
-          <hr className="divider" />
+          <hr className="text-secondary opacity-25 mb-4" />
 
           {/* Pagination */}
-          <div className="pagination">
-            <button className="page-nav">← Previous</button>
-            <div className="page-numbers">
-              <span className="active">1</span>
-              <span>2</span>
-              <span>3</span>
-              <span>...</span>
-              <span>10</span>
+          <div className="d-flex justify-content-between align-items-center mt-4">
+            <button className="btn btn-outline-secondary rounded-3 px-3 py-2 fw-medium text-black d-flex align-items-center gap-2" style={{ border: '1px solid rgba(0,0,0,0.1)' }}>
+               ← <span className="d-none d-sm-inline">Previous</span>
+            </button>
+            <div className="d-flex gap-1 gap-sm-2">
+              <span className="btn rounded-3 px-3 py-2 fw-medium bg-black text-white hover-bg-dark">1</span>
+              <span className="btn rounded-3 px-3 py-2 fw-medium text-muted-custom hover-bg-light border-0">2</span>
+              <span className="btn rounded-3 px-3 py-2 fw-medium text-muted-custom hover-bg-light border-0">3</span>
+              <span className="btn rounded-3 px-3 py-2 fw-medium text-muted-custom border-0 pe-none">...</span>
+              <span className="btn rounded-3 px-3 py-2 fw-medium text-muted-custom hover-bg-light border-0">10</span>
             </div>
-            <button className="page-nav">Next →</button>
+            <button className="btn btn-outline-secondary rounded-3 px-3 py-2 fw-medium text-black d-flex align-items-center gap-2" style={{ border: '1px solid rgba(0,0,0,0.1)' }}>
+               <span className="d-none d-sm-inline">Next</span> →
+            </button>
           </div>
         </main>
       </div>
 
       <style>{`
-        .category-page { padding-top: 24px; padding-bottom: 100px; }
-        .breadcrumbs { display: flex; align-items: center; gap: 8px; font-size: 14px; margin-bottom: 24px; color: rgba(0,0,0,0.6); }
-        .breadcrumbs a { text-decoration: none; color: inherit; }
-        .breadcrumbs .current { color: black; font-weight: 500; }
-
-        .category-layout { display: grid; grid-template-columns: 295px 1fr; gap: 20px; }
-        
-        .filters-sidebar { border: 1px solid rgba(0,0,0,0.1); border-radius: 20px; padding: 24px; height: fit-content; }
-        .filter-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
-        .filter-header h3 { font-size: 20px; font-weight: 700; }
-        
-        .divider { border: none; border-top: 1px solid rgba(0,0,0,0.1); margin: 24px 0; }
-        
-        .filter-section { display: flex; flex-direction: column; gap: 16px; }
-        .filter-item { display: flex; justify-content: space-between; align-items: center; cursor: pointer; color: rgba(0,0,0,0.6); font-size: 16px; text-decoration: none; transition: 0.2s; }
-        .filter-item.active-filter { color: #000; font-weight: 700; }
-        
-        .section-title-wrap { display: flex; justify-content: space-between; align-items: center; }
-        .section-title-wrap h4 { font-size: 20px; font-weight: 700; }
-        
-        .price-slider-wrap { margin-top: 8px; }
-        .slider { width: 100%; height: 6px; background: #F0F0F0; border-radius: 5px; outline: none; -webkit-appearance: none; }
-        .slider::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; background: #000; border-radius: 50%; cursor: pointer; }
-        .price-labels { display: flex; justify-content: space-between; margin-top: 10px; font-weight: 500; }
-        
-        .colors-grid { display: flex; flex-wrap: wrap; gap: 12px; }
-        .color-dot { width: 37px; height: 37px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
-        .color-dot.active { box-shadow: 0 0 0 2px white, 0 0 0 4px #000; }
-        
-        .sizes-grid { display: flex; flex-wrap: wrap; gap: 8px; }
-        .size-tag { border: none; background: #F0F0F0; padding: 10px 18px; border-radius: 62px; color: rgba(0,0,0,0.6); font-size: 14px; cursor: pointer; transition: 0.2s; }
-        .size-tag.active { background: #000; color: #fff; }
-        
-        .apply-filter-btn { width: 100%; padding: 16px; background: #000; color: #fff; border: none; border-radius: 62px; margin-top: 24px; font-weight: 500; cursor: pointer; }
-        
-        .category-products { flex: 1; }
-        .products-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 16px; }
-        .products-header h2 { font-size: 32px; font-weight: 700; }
-        .header-controls { display: flex; align-items: center; gap: 20px; color: rgba(0,0,0,0.6); font-size: 16px; }
-        .sort-wrap { cursor: pointer; }
-        .sort-wrap strong { color: black; }
-        
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; margin-bottom: 40px; }
-        
-        .pagination { display: flex; justify-content: space-between; align-items: center; padding-top: 20px; }
-        .page-nav { background: #fff; border: 1px solid rgba(0,0,0,0.1); padding: 8px 14px; border-radius: 8px; cursor: pointer; font-weight: 500; }
-        .page-numbers { display: flex; gap: 12px; }
-        .page-numbers span { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 8px; cursor: pointer; color: rgba(0,0,0,0.6); }
-        .page-numbers span.active { background: rgba(0,0,0,0.06); color: #000; }
-
-        .loading, .no-products { text-align: center; padding: 100px 0; color: rgba(0,0,0,0.6); grid-column: 1 / -1; }
-
-        @media (max-width: 992px) {
-          .category-layout { grid-template-columns: 1fr; }
-          .filters-sidebar { display: none; } /* In a real app we'd make this a drawer */
-        }
+        .hover-text-black:hover { color: #000 !important; }
+        .hover-bg-light:hover { background-color: rgba(0,0,0,0.06) !important; color: #000 !important;}
+        .form-range::-webkit-slider-thumb { background: #000; }
+        .form-range::-moz-range-thumb { background: #000; }
+        .form-range::-ms-thumb { background: #000; }
       `}</style>
     </div>
   );

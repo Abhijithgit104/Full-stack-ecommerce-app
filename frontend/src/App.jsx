@@ -9,6 +9,7 @@ import Checkout from './pages/Checkout';
 import Orders from './pages/Orders';
 import ProductDetail from './pages/ProductDetail';
 import Category from './pages/Category';
+import Success from './pages/Success';
 import ProtectedRoute from './components/ProtectedRoute';
 import { useSelector } from 'react-redux';
 
@@ -20,9 +21,12 @@ function App() {
       <div className="App">
         {token && (
           <>
-            <header className="banner">
-              Sign up and get 20% off to your first order. <a href="#">Sign Up Now</a>
-              <button className="close-banner">×</button>
+            <header className="bg-black text-white text-center py-2 position-relative" style={{ fontSize: '14px' }}>
+              Sign up and get 20% off to your first order. <a href="#" className="text-white text-decoration-underline fw-medium">Sign Up Now</a>
+              <button 
+                className="btn-close btn-close-white position-absolute end-0 top-50 translate-middle-y me-3" 
+                aria-label="Close"
+              ></button>
             </header>
             <Navbar />
           </>
@@ -31,49 +35,20 @@ function App() {
         <main>
           <Routes>
             <Route path="/" element={token ? <Home /> : <Navigate to="/login" replace />} />
-            
             <Route path="/register" element={token ? <Navigate to="/" replace /> : <Register />} />
             <Route path="/login" element={token ? <Navigate to="/" replace /> : <Login />} />
-            
             <Route path="/product/:id" element={token ? <ProductDetail /> : <Navigate to="/login" replace />} />
             <Route path="/category/:type/:value" element={token ? <Category /> : <Navigate to="/login" replace />} />
             <Route path="/cart" element={token ? <Cart /> : <Navigate to="/" replace />} />
-            
             <Route path="/checkout" element={token ? <Checkout /> : <Navigate to="/login" replace />} />
             <Route path="/orders" element={token ? <Orders /> : <Navigate to="/login" replace />} />
-
+            <Route path="/success" element={token ? <Success /> : <Navigate to="/login" replace />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>
         {token && <Footer />}
 
-      <style>{`
-        .banner {
-          background: #000;
-          color: #fff;
-          text-align: center;
-          padding: 10px 0;
-          font-size: 14px;
-          position: relative;
-        }
-        .banner a {
-          text-decoration: underline;
-          font-weight: 500;
-        }
-        .close-banner {
-          position: absolute;
-          right: 20px;
-          top: 50%;
-          transform: translateY(-50%);
-          background: transparent;
-          color: white;
-          font-size: 20px;
-        }
-        .divider {
-          height: 1px;
-          background: rgba(0,0,0,0.1);
-        }
-      `}</style>
+        <div className="divider" style={{ height: '1px', background: 'rgba(0,0,0,0.1)' }}></div>
       </div>
     </Router>
   );
