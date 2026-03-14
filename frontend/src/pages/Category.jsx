@@ -4,11 +4,13 @@ import axios from 'axios';
 import api from '../services/api';
 import { ChevronRight, Settings2, SlidersHorizontal, ChevronDown, Check } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
+import { useServer } from '../context/ServerContext';
 
 const Category = () => {
   const { type, value } = useParams();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { serverReady } = useServer();
   
   // Filter States
   const [priceRange, setPriceRange] = useState(500);
@@ -42,9 +44,11 @@ const Category = () => {
   };
 
   useEffect(() => {
-    fetchProducts();
+    if (serverReady) {
+      fetchProducts();
+    }
     window.scrollTo(0, 0);
-  }, [type, value, window.location.search]);
+  }, [type, value, window.location.search, serverReady]);
 
   const categories = ['T-shirts', 'Shorts', 'Shirts', 'Hoodie', 'Jeans'];
   const colors = ['#00C12B', '#F50606', '#F5DD06', '#F57906', '#06BFF5', '#063AF5', '#7D06F5', '#F506A4', '#FFFFFF', '#000000'];

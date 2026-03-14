@@ -6,6 +6,7 @@ import { addToCart } from '../store/cartSlice';
 import { Star, Check, ChevronRight, Settings2, Plus, Minus } from 'lucide-react';
 import ProductSection from '../components/ProductSection';
 import Toast from '../components/Toast';
+import { useServer } from '../context/ServerContext';
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -13,6 +14,7 @@ const ProductDetail = () => {
   const navigate = useNavigate();
   const { selectedProduct: product, loading } = useSelector((state) => state.products);
   const { token } = useSelector((state) => state.auth);
+  const { serverReady } = useServer();
   
   const [activeTab, setActiveTab] = useState('reviews');
   const [selectedSize, setSelectedSize] = useState('Large');
@@ -21,9 +23,11 @@ const ProductDetail = () => {
   const [showToast, setShowToast] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchProductDetail(id));
+    if (serverReady) {
+      dispatch(fetchProductDetail(id));
+    }
     window.scrollTo(0, 0);
-  }, [dispatch, id]);
+  }, [dispatch, id, serverReady]);
 
   const handleAddToCart = () => {
     if (!token) {
