@@ -2,19 +2,25 @@ import  { useEffect, useState } from 'react';
 import api from '../services/api';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useServer } from '../context/ServerContext';
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
   const { token } = useSelector((state) => state.auth);
+  const { serverReady } = useServer();
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchOrders = async () => {
-      const response = await api.get('/orders/');
-      setOrders(Array.isArray(response.data) ? response.data : []);
+      try {
+        const response = await api.get('/orders/');
+        setOrders(Array.isArray(response.data) ? response.data : []);
+      } catch (err) {
+        console.error("Failed to fetch orders:", err);
+      }
     };
-    if (token) fetchOrders();
-  }, [token]);
+    if (token && serverReady) fetchOrders();
+  }, [token, serverReady]);
 
   return (
     <div className="container py-5" style={{ maxWidth: '900px' }}>

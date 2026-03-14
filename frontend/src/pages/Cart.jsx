@@ -2,16 +2,18 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCart, removeFromCart } from '../store/cartSlice';
 import { useNavigate } from 'react-router-dom';
+import { useServer } from '../context/ServerContext';
 
 const Cart = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { items, loading } = useSelector((state) => state.cart);
   const { token } = useSelector((state) => state.auth);
+  const { serverReady } = useServer();
 
   useEffect(() => {
-    if (token) dispatch(fetchCart());
-  }, [dispatch, token]);
+    if (token && serverReady) dispatch(fetchCart());
+  }, [dispatch, token, serverReady]);
 
   const total = Array.isArray(items) ? items.reduce((acc, item) => acc + item.product_details.price * item.quantity, 0) : 0;
 

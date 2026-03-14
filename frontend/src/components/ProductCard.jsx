@@ -4,11 +4,13 @@ import { useDispatch } from 'react-redux';
 import { addToCart } from '../store/cartSlice';
 import { useNavigate } from 'react-router-dom';
 import Toast from './Toast';
+import { useServer } from '../context/ServerContext';
 
 const ProductCard = ({ product }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showToast, setShowToast] = React.useState(false);
+  const { serverReady } = useServer();
 
   const renderStars = (rating) => {
     return (
@@ -47,13 +49,14 @@ const ProductCard = ({ product }) => {
       <div className="mt-auto">
         <button 
           className="btn btn-black w-100 rounded-pill fw-medium py-2" 
+          disabled={!serverReady}
           onClick={(e) => {
             e.stopPropagation();
             dispatch(addToCart({ product: product.id, quantity: 1 }));
             setShowToast(true);
           }}
         >
-          Add to Cart
+          {serverReady ? 'Add to Cart' : 'Waking...'}
         </button>
       </div>
 

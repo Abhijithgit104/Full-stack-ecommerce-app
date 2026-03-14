@@ -11,10 +11,17 @@ const Login = () => {
   const navigate = useNavigate();
   const { loading, error } = useSelector((state) => state.auth);
   const { serverReady } = useServer();
+  const [isSlow, setIsSlow] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSlow(false);
+    const slowTimer = setTimeout(() => setIsSlow(true), 5000);
+    
     const resultAction = await dispatch(login(credentials));
+    clearTimeout(slowTimer);
+    setIsSlow(false);
+    
     if (login.fulfilled.match(resultAction)) {
       navigate('/');
     }
@@ -72,7 +79,7 @@ const Login = () => {
             {!serverReady ? (
               <><span className="spinner-border spinner-border-sm"></span> Connecting to server…</>
             ) : loading ? (
-              <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              <><span className="spinner-border spinner-border-sm me-2"></span> {isSlow ? 'Almost there, waking up database...' : 'Signing In...'}</>
             ) : (
               <> Sign In <LogIn size={18} /></>
             )}

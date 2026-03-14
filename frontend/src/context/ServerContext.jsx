@@ -13,42 +13,42 @@ export function ServerProvider({ children }) {
     let cancelled = false;
     let intervalId;
 
-    // Step 1: Fire a no-cors ping to wake Render immediately (non-blocking)
-    // We add a random query param to bypass any intermediate caches
-    const wakeUpUrl = `${API_BASE_URL}/products/?wake=${Date.now()}`;
-    fetch(wakeUpUrl, { mode: 'no-cors' }).catch(() => {});
+    // Step 1: Fire a no-cors ping to wake Render immediately
+    fetch(`${API_BASE_URL}/health/`, { mode: 'no-cors' }).catch(() => {});
 
-    // Step 2: Poll with a real CORS request to detect when Django is truly alive
+    // Step 2: Poll /health/ endpoint. This endpoint checks DB connectivity.
+    // It only returns 200 OK when the server AND the database are both ready.
     const checkReady = async () => {
       try {
-        const res = await fetch(`${API_BASE_URL}/products/?check=${Date.now()}`, {
-          // Short timeout for the check itself so we can retry frequently
+        const res = await fetch(`${API_BASE_URL}/health/?check=${Date.now()}`, {
           signal: AbortSignal.timeout(4000), 
         });
-        if (res.ok && !cancelled) {
-          setServerReady(true);
-          clearInterval(intervalId);
+        
+        // We only mark ready if we get a successful JSON response
+        if (res.ok) {
+          const data = await res.json();
+          if (data.status === 'ready' && !cancelled) {
+            setServerReady(true);
+            clearInterval(intervalId);
+          }
         }
       } catch (_) {
-        // Still waking up...
+        // Still waking up or DB pending...
       }
     };
 
-    // Start polling almost immediately
-    const startTimer = setTimeout(() => {
-      checkReady();
-      intervalId = setInterval(checkReady, 3000);
+    // Start polling immediately
+    checkReady();
+    intervalId = setInterval(checkReady, 4000);
 
-      // Force-unblock after 3 minutes just in case
-      setTimeout(() => {
-        clearInterval(intervalId);
-        if (!cancelled) setServerReady(true); 
-      }, 180000);
-    }, 1000);
+    // Unblock after 3 mins anyway to prevent permanent freeze
+    setTimeout(() => {
+      clearInterval(intervalId);
+      if (!cancelled) setServerReady(true); 
+    }, 180000);
 
     return () => {
       cancelled = true;
-      clearTimeout(startTimer);
       clearInterval(intervalId);
     };
   }, []);
