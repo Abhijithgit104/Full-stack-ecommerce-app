@@ -76,7 +76,15 @@ const Register = () => {
             </div>
           </div>
 
-          {error && <div className="p-3 rounded-4 bg-danger bg-opacity-10 text-danger text-center fs-6 fw-medium">Registration failed. Please check your details.</div>}
+          {error && (
+            <div className="p-3 rounded-4 bg-danger bg-opacity-10 text-danger text-center fs-6">
+              {typeof error === 'object'
+                ? Object.entries(error).map(([field, msgs]) => (
+                    <div key={field}><strong>{field}:</strong> {Array.isArray(msgs) ? msgs.join(', ') : msgs}</div>
+                  ))
+                : 'Registration failed. Please check your details.'}
+            </div>
+          )}
 
           <button type="submit" className="btn btn-black rounded-pill py-3 px-4 fs-6 fw-semibold d-flex align-items-center justify-content-center gap-2 mt-2" disabled={loading}>
             {loading ? (
