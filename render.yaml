@@ -19,5 +19,3 @@ services:
 
 databases:
   - name: ecomm-db
-    databaseName: full_stack_db
-    user: postgres
