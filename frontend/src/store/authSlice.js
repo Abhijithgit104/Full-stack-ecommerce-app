@@ -4,8 +4,8 @@ import api from '../services/api';
 export const login = createAsyncThunk('auth/login', async (credentials, { rejectWithValue }) => {
   try {
     const response = await api.post('/auth/login/', credentials);
-    localStorage.setItem('token', response.data.access);
-    localStorage.setItem('user', JSON.stringify(response.data.user));
+    if (response.data.access) localStorage.setItem('token', response.data.access);
+    if (response.data.user) localStorage.setItem('user', JSON.stringify(response.data.user));
     return response.data;
   } catch (err) {
     return rejectWithValue(err.response.data);
@@ -15,8 +15,8 @@ export const login = createAsyncThunk('auth/login', async (credentials, { reject
 export const register = createAsyncThunk('auth/register', async (userData, { rejectWithValue }) => {
   try {
     const response = await api.post('/auth/register/', userData);
-    localStorage.setItem('token', response.data.access);
-    localStorage.setItem('user', JSON.stringify(response.data.user));
+    if (response.data.access) localStorage.setItem('token', response.data.access);
+    if (response.data.user) localStorage.setItem('user', JSON.stringify(response.data.user));
     return response.data;
   } catch (err) {
     return rejectWithValue(err.response.data);
