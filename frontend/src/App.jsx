@@ -10,43 +10,67 @@ import Orders from './pages/Orders';
 import ProductDetail from './pages/ProductDetail';
 import Category from './pages/Category';
 import Success from './pages/Success';
-import ProtectedRoute from './components/ProtectedRoute';
 import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import api from './services/api';
+
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 function App() {
   const { token } = useSelector((state) => state.auth);
-  const [serverReady, setServerReady] = useState(false);
   const [showWakeUpBanner, setShowWakeUpBanner] = useState(false);
 
   useEffect(() => {
-    // Ping the backend to wake up Render free-tier server on app load
     let bannerTimer;
-    bannerTimer = setTimeout(() => {
-      // If server hasn't responded within 2s, show the warm-up banner
-      setShowWakeUpBanner(true);
-    }, 2000);
+    let retryInterval;
+    let attempts = 0;
+    const MAX_ATTEMPTS = 30; // 30 * 2s = 60 seconds
 
-    api.get('/api/products/?limit=1')
-      .then(() => {
-        clearTimeout(bannerTimer);
-        setServerReady(true);
-        setShowWakeUpBanner(false);
-      })
-      .catch(() => {
-        clearTimeout(bannerTimer);
-        setServerReady(true);
-        setShowWakeUpBanner(false);
-      });
+    const pingServer = () => {
+      attempts++;
+      // Step 1: Use mode:'no-cors' to bypass CORS preflight during cold start.
+      // Render's sleeping infrastructure blocks CORS preflight (OPTIONS) but
+      // allows no-cors GET requests, which wakes the Django process.
+      fetch(`${API_BASE_URL}/api/products/?limit=1`, { mode: 'no-cors' })
+        .then(() => {
+          // Step 2: Now try a real CORS-enabled request. If Django is awake
+          // and CORS headers are present, this will succeed.
+          return fetch(`${API_BASE_URL}/api/products/?limit=1`);
+        })
+        .then((res) => {
+          if (res.ok) {
+            clearTimeout(bannerTimer);
+            clearInterval(retryInterval);
+            setShowWakeUpBanner(false);
+          }
+        })
+        .catch(() => {
+          // Django not ready yet — keep retrying
+        });
 
-    return () => clearTimeout(bannerTimer);
+      if (attempts >= MAX_ATTEMPTS) {
+        clearInterval(retryInterval);
+        setShowWakeUpBanner(false); // Give up, let user try anyway
+      }
+    };
+
+    // Show the banner after 2s if backend hasn't responded yet
+    bannerTimer = setTimeout(() => setShowWakeUpBanner(true), 2000);
+
+    // Ping immediately, then every 2s
+    pingServer();
+    retryInterval = setInterval(pingServer, 2000);
+
+    return () => {
+      clearTimeout(bannerTimer);
+      clearInterval(retryInterval);
+    };
   }, []);
 
   return (
     <Router>
       <div className="App">
-        {/* Render free-tier warm-up banner */}
+
+        {/* Render free-tier cold-start banner */}
         {showWakeUpBanner && (
           <div
             className="d-flex align-items-center justify-content-center gap-2 text-white py-2 px-3 text-center"
@@ -62,16 +86,17 @@ function App() {
         {token && (
           <>
             <header className="bg-black text-white text-center py-2 position-relative" style={{ fontSize: '14px' }}>
-              Sign up and get 20% off to your first order. <a href="#" className="text-white text-decoration-underline fw-medium">Sign Up Now</a>
-              <button 
-                className="btn-close btn-close-white position-absolute end-0 top-50 translate-middle-y me-3" 
+              Sign up and get 20% off to your first order.{' '}
+              <a href="#" className="text-white text-decoration-underline fw-medium">Sign Up Now</a>
+              <button
+                className="btn-close btn-close-white position-absolute end-0 top-50 translate-middle-y me-3"
                 aria-label="Close"
               ></button>
             </header>
             <Navbar />
           </>
         )}
-        
+
         <main>
           <Routes>
             <Route path="/" element={token ? <Home /> : <Navigate to="/login" replace />} />
@@ -86,9 +111,9 @@ function App() {
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>
-        {token && <Footer />}
 
-        <div className="divider" style={{ height: '1px', background: 'rgba(0,0,0,0.1)' }}></div>
+        {token && <Footer />}
+        <div style={{ height: '1px', background: 'rgba(0,0,0,0.1)' }}></div>
       </div>
     </Router>
   );
