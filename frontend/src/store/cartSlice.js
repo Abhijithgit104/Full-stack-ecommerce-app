@@ -1,14 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
-
-const API_URL = 'http://localhost:8001/cart/';
+import api from '../services/api';
 
 export const addToCart = createAsyncThunk('cart/add', async (item, { getState, rejectWithValue }) => {
   try {
     const { auth } = getState();
-    const response = await axios.post(API_URL, item, {
-      headers: { Authorization: `Bearer ${auth.token}` }
-    });
+    const response = await api.post('/cart/', item);
     return response.data;
   } catch (err) {
     return rejectWithValue(err.response.data);
@@ -18,9 +14,7 @@ export const addToCart = createAsyncThunk('cart/add', async (item, { getState, r
 export const fetchCart = createAsyncThunk('cart/fetch', async (_, { getState, rejectWithValue }) => {
   try {
     const { auth } = getState();
-    const response = await axios.get(API_URL, {
-      headers: { Authorization: `Bearer ${auth.token}` }
-    });
+    const response = await api.get('/cart/');
     return response.data;
   } catch (err) {
     return rejectWithValue(err.response.data);

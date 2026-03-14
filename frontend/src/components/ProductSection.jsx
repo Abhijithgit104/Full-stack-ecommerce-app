@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import api from '../services/api';
 import { Link } from 'react-router-dom';
 import ProductCard from './ProductCard';
 
@@ -10,7 +11,7 @@ const ProductSection = ({ title, endpoint, showTitle = true }) => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get(`http://localhost:8001/products/${endpoint}`);
+        const response = await api.get(`/products/${endpoint}`);
         const data = response.data;
         // If endpoint contains 'limit', we trust it. Otherwise show only 4.
         setProducts(endpoint.includes('limit') ? data : data.slice(0, 4));

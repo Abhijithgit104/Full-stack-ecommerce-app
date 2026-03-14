@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
+import api from '../services/api';
 import { ChevronRight, Settings2, SlidersHorizontal, ChevronDown, Check } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
 
@@ -21,7 +22,7 @@ const Category = () => {
       const queryParams = new URLSearchParams(window.location.search);
       const search = queryParams.get('search');
       
-      let url = `http://localhost:8001/products/?`;
+      let url = `/products/?`;
       if (type && value) url += `${type}=${value}&`;
       if (search) url += `search=${search}&`;
       
@@ -31,7 +32,7 @@ const Category = () => {
       if (selectedColor) url += `color=${encodeURIComponent(selectedColor)}&`;
       url += `max_price=${priceRange}&`;
       
-      const response = await axios.get(url);
+      const response = await api.get(url);
       setProducts(response.data);
       setLoading(false);
     } catch (error) {

@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abhijith T M - Resume</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --text-color: #000;
+            --link-color: #0066cc;
+            --border-color: #000;
+            --font-main: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-main);
+            line-height: 1.4;
+            color: var(--text-color);
+            background-color: #f0f0f0;
+            padding: 40px 0;
+        }
+
+        .resume-container {
+            width: 8.5in;
+            min-height: 11in;
+            background-color: #fff;
+            margin: 0 auto;
+            padding: 0.5in 0.75in;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .name {
+            font-size: 28pt;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .title {
+            font-size: 14pt;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            font-size: 9.5pt;
+            flex-wrap: wrap;
+        }
+
+        .contact-info a {
+            color: inherit;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .contact-info a:hover {
+            text-decoration: underline;
+        }
+
+        .contact-info i {
+            font-size: 10pt;
+        }
+
+        .section {
+            margin-top: 15px;
+        }
+
+        .section-header {
+            font-size: 12pt;
+            font-weight: 700;
+            border-bottom: 1.5px solid var(--border-color);
+            margin-bottom: 8px;
+            padding-bottom: 2px;
+        }
+
+        .experience-item, .project-item, .education-item {
+            margin-bottom: 12px;
+        }
+
+        .item-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        .company-name, .project-name, .school-name {
+            font-weight: 700;
+            font-size: 10.5pt;
+        }
+
+        .project-name a {
+            color: var(--link-color);
+            text-decoration: none;
+        }
+
+        .project-name a:hover {
+            text-decoration: underline;
+        }
+
+        .date-range {
+            font-weight: 700;
+            font-size: 10pt;
+        }
+
+        .item-sub-row {
+            display: flex;
+            justify-content: space-between;
+            font-style: italic;
+            font-size: 10pt;
+            margin-bottom: 4px;
+        }
+
+        .job-title, .degree {
+            font-weight: 500;
+        }
+
+        .location {
+            font-weight: 400;
+        }
+
+        ul {
+            margin-left: 18px;
+            list-style-type: disc;
+        }
+
+        li {
+            font-size: 9.5pt;
+            margin-bottom: 2px;
+            text-align: justify;
+        }
+
+        .skills-content {
+            font-size: 9.5pt;
+        }
+
+        .skill-category {
+            margin-bottom: 4px;
+        }
+
+        .skill-category strong {
+            font-weight: 700;
+        }
+
+        @media print {
+            body {
+                background-color: #fff;
+                padding: 0;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .resume-container {
+                box-shadow: none;
+                margin: 0;
+                width: 100%;
+                padding: 0.5in;
+            }
+            .contact-info a {
+                color: #000 !important;
+            }
+            .contact-info i {
+                color: #000 !important;
+                display: inline-block !important;
+                /* Ensure icons are rendered */
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands" !important;
+                font-weight: 900 !important;
+            }
+            .contact-info .fa-brands {
+                font-weight: 400 !important;
+            }
+        }
+        .demo-link{
+    color: var(--link-color);
+    font-size: 11pt;
+}
+
+.demo-link:hover{
+    opacity: 0.7;
+}
+.demo-container{
+    text-align: right;
+    font-size: 9pt;
+    margin-top: 2px;
+}
+
+.demo-container a{
+    color: var(--link-color);
+    text-decoration: none;
+}
+
+.demo-container a:hover{
+    text-decoration: underline;
+}
+    </style>
+</head>
+<body>
+
+    <div class="resume-container">
+        <header class="header">
+            <h1 class="name">Abhijith T M</h1>
+            <div class="title">Python Full Stack Developer</div>
+            <div class="contact-info">
+                <a href="tel:+918891304194"><i class="fa-solid fa-phone"></i> +91 8891304194</a>
+                <a href="mailto:abhijithtm861@gmail.com"><i class="fa-solid fa-envelope"></i> abhijithtm861@gmail.com</a>
+                <a href="https://linkedin.com/in/abhijith-tm-34304a259" target="_blank"><i class="fa-brands fa-linkedin"></i> linkedin.com/in/abhijith-tm-34304a259</a>
+                <a href="https://github.com/Abhijithgit104" target="_blank"><i class="fa-brands fa-github"></i> github.com/Abhijithgit104</a>
+            </div>
+        </header>
+
+        <section class="section">
+            <h2 class="section-header">Professional Summary</h2>
+            <div class="project-item">
+                <div class="summary-text" style="font-size: 9.5pt; text-align: justify;">
+                    A dedicated Bachelor of Computer Applications (BCA) graduate specializing in modern web technologies. Passionate about crafting high-performance, responsive web applications and continuously refining skills in both frontend and backend development to deliver comprehensive digital solutions using React, Django, and Next.js.
+                </div>
+            </div>
+        </section>
+
+<section class="section">
+    <h2 class="section-header">Technical Skills</h2>
+    <div class="skills-content">
+
+        <div class="skill-category">
+            <strong>Front-End Frameworks:</strong> React.js, Next.js, Redux, Material UI, Bootstrap
+        </div>
+
+        <div class="skill-category">
+            <strong>Back-End Frameworks:</strong> Django, Flask
+        </div>
+
+        <div class="skill-category">
+            <strong>Programming Languages:</strong> Python, JavaScript, TypeScript
+        </div>
+
+        <div class="skill-category">
+            <strong>Databases:</strong> PostgreSQL
+        </div>
+
+        <div class="skill-category">
+            <strong>Web Technologies:</strong> HTML, CSS, RESTful APIs
+        </div>
+
+        <div class="skill-category">
+            <strong>Tools & Technologies:</strong> Git, GitHub, SDLC
+        </div>
+
+        <div class="skill-category">
+            <strong>Soft Skills:</strong> Problem Solving, Collaboration, Communication, Analytical Thinking, Adaptability
+        </div>
+
+    </div>
+</section>
+
+<section class="section">
+    <h2 class="section-header">Experience / Projects</h2>
+
+    <div class="experience-item">
+        <div class="item-row">
+            <span class="company-name">Upcode Software Labs</span>
+            <span class="date-range">June 2025 – January 2026</span>
+        </div>
+
+        <div class="item-sub-row">
+            <span class="job-title">Python Full Stack Developer Intern</span>
+            <span class="location">Calicut, Kerala</span>
+        </div>
+
+        <ul>
+            <li>
+                Developed and maintained full-stack web applications using 
+                <strong>React.js</strong> for the frontend and 
+                <strong>Django</strong> for backend services, enabling seamless integration between client and server components.
+            </li>
+
+            <li>
+                Built dynamic and responsive user interfaces using 
+                <strong>React.js, Material UI, and Bootstrap</strong>, improving usability and cross-device compatibility.
+            </li>
+
+            <li>
+                Designed and implemented secure 
+                <strong>RESTful APIs using Django</strong> to enable efficient data communication between frontend applications and backend services.
+            </li>
+
+            <li>
+                Structured and optimized 
+                <strong>PostgreSQL database schemas</strong> to improve data integrity, query performance, and application scalability.
+            </li>
+
+            <li>
+                Implemented component-based architecture and efficient state handling in 
+                <strong>React.js</strong>, improving maintainability and scalability of the frontend codebase.
+            </li>
+
+            <li>
+                Integrated asynchronous data fetching and API handling to dynamically render application data and improve overall user experience.
+            </li>
+
+            <li>
+                Utilized <strong>Git and GitHub</strong> for version control, maintaining an organized codebase and collaborating effectively with team members.
+            </li>
+
+            <li>
+                Participated in the complete <strong>Software Development Lifecycle (SDLC)</strong>, including requirement analysis, development, testing, and deployment while following agile practices.
+            </li>
+        </ul>
+    </div>
+
+</section>
+
+        <section class="section">
+            <h2 class="section-header">Personal Projects/Awards & Achievements</h2>
+            <div class="project-item">
+                <div class="project-name"><a href="https://github.com/Abhijithgit104/Full-stack-ecommerce-app.git">Full-Stack E-commerce Application - React & Django</a></div>
+                <ul>
+                    <li>Developed a comprehensive full-stack e-commerce solution with a Vite-powered React frontend and a robust Django REST API backend.</li>
+                    <li>Implemented secure user authentication using Simple JWT and centralized state management with Redux Toolkit for seamless user experiences.</li>
+                    <li>Architected a scalable PostgreSQL database schema for products, orders, and user accounts, optimizing data relationships and persistence.</li>
+                    <li>Created dynamic, responsive interfaces including product catalogs, real-time cart updates, and an order management system.</li>
+                </ul>
+                 <div class="demo-container">
+    <a href="https://full-stack-ecommerce-app-xi.vercel.app/" target="_blank">
+      <i class="fa-solid fa-arrow-up-right-from-square"></i> Live Demo
+    </a>
+  </div>
+            </div>
+
+            <div class="project-item">
+                <div class="project-name"><a href="https://github.com/Abhijithgit104/Portfolio.git">Portfolio - React JS Website</a></div>
+                <ul>
+                    <li>Designed and developed a premium, responsive personal portfolio website to showcase professional projects and skills.</li>
+                    <li>Implemented modern UI/UX principles using React.js and glassmorphism effects for a high-quality visual experience.</li>
+                    <li>Optimized page performance and deployed the application for seamless global accessibility.</li>
+                </ul>
+                 <div class="demo-container">
+    <a href="https://your-demo.vercel.app" target="_blank">
+      <i class="fa-solid fa-arrow-up-right-from-square"></i> Live Demo
+    </a>
+  </div>
+            </div>
+
+            <div class="project-item">
+                <div class="project-name"><a href="https://github.com/Abhijithgit104/app-router-nextjs.git">Next.js Ecommerce Store - Modern Web</a></div>
+                <ul>
+                    <li>Built a high-performance modern storefront using the latest Next.js App Router for optimal routing and speed.</li>
+                    <li>Implemented strong typing with TypeScript to ensure code reliability and minimize runtime errors.</li>
+                    <li>Focused on a seamless user experience with high-quality UI components and performance optimizations.</li>
+                </ul>
+                 <div class="demo-container">
+    <a href="https://your-demo.vercel.app" target="_blank">
+      <i class="fa-solid fa-arrow-up-right-from-square"></i> Live Demo
+    </a>
+  </div>
+            </div>
+
+            <div class="project-item">
+                <div class="project-name"><a href="https://github.com/Abhijithgit104/Flipkart-clone.git">Flipkart Homepage Clone - UI Design</a></div>
+                <ul>
+                    <li>Created a pixel-perfect recreation of the Flipkart homepage using semantic HTML and custom CSS.</li>
+                    <li>Focused accurately on responsive design principles and UI fidelity compared to the original site.</li>
+                </ul>
+                 <div class="demo-container">
+    <a href="https://your-demo.vercel.app" target="_blank">
+      <i class="fa-solid fa-arrow-up-right-from-square"></i> Live Demo
+    </a>
+  </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-header">Education</h2>
+            <div class="education-item">
+                <div class="item-row">
+                    <span class="school-name">Ideal College For Advanced Studies, Kadakassery</span>
+                    <span class="date-range">2022 – 2025</span>
+                </div>
+                <div class="item-sub-row">
+                    <span class="degree">Bachelor of Computer Applications (BCA)</span>
+                    <span class="location">Kerala</span>
+                </div>
+            </div>
+
+            <div class="education-item">
+                <div class="item-row">
+                    <span class="school-name">GHSS CHALISSERY</span>
+                    <span class="date-range">2020 – 2022</span>
+                </div>
+                <div class="item-sub-row">
+                    <span class="degree">Higher Secondary Education</span>
+                    <span class="location">Kerala</span>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+</body>
+</html>
+
