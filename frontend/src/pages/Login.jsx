@@ -10,9 +10,12 @@ const Login = () => {
   const navigate = useNavigate();
   const { loading, error } = useSelector((state) => state.auth);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(login(credentials));
+    const resultAction = await dispatch(login(credentials));
+    if (login.fulfilled.match(resultAction)) {
+      navigate('/');
+    }
   };
 
   return (

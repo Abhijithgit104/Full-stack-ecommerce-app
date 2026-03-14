@@ -10,9 +10,12 @@ const Register = () => {
   const navigate = useNavigate();
   const { loading, error } = useSelector((state) => state.auth);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(register(userData));
+    const resultAction = await dispatch(register(userData));
+    if (register.fulfilled.match(resultAction)) {
+      navigate('/');
+    }
   };
 
   return (
