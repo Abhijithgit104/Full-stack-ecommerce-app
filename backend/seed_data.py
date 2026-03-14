@@ -1,13 +1,25 @@
 import os
 import django
 
+import sys
+from pathlib import Path
+
+# Add the project root to sys.path to resolve imports
+BASE_DIR = Path(__file__).resolve().parent
+sys.path.append(str(BASE_DIR))
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ecomm.settings')
 django.setup()
 
 from products.models import Product
 
-# Clear existing products
-Product.objects.all().delete()
+if Product.objects.exists():
+    print("Database already has products. Skipping seeding.")
+    exit(0)
+
+print("Seeding database...")
+
+
 
 # Design Assets
 HERO_IMAGE_URL = "/images/hero.png"

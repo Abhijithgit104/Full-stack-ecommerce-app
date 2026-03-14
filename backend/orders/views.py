@@ -4,6 +4,8 @@ from .models import CartItem, Order, OrderItem
 from .serializers import CartItemSerializer, OrderSerializer
 from products.models import Product
 
+
+
 class CartView(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = CartItemSerializer
@@ -30,9 +32,15 @@ class CartView(generics.CreateAPIView):
         return Response(CartItemSerializer(cart_item).data, status=status.HTTP_201_CREATED)
 
     def get(self, request):
-        # Optional: helpful to have GET /cart too
         cart_items = CartItem.objects.filter(user=request.user)
         return Response(CartItemSerializer(cart_items, many=True).data)
+
+class CartItemDetail(generics.DestroyAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = CartItemSerializer
+
+    def get_queryset(self):
+        return CartItem.objects.filter(user=self.request.user)
 
 class OrderList(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
