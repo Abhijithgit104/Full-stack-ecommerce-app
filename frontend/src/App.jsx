@@ -12,13 +12,53 @@ import Category from './pages/Category';
 import Success from './pages/Success';
 import ProtectedRoute from './components/ProtectedRoute';
 import { useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import api from './services/api';
 
 function App() {
   const { token } = useSelector((state) => state.auth);
+  const [serverReady, setServerReady] = useState(false);
+  const [showWakeUpBanner, setShowWakeUpBanner] = useState(false);
+
+  useEffect(() => {
+    // Ping the backend to wake up Render free-tier server on app load
+    let bannerTimer;
+    bannerTimer = setTimeout(() => {
+      // If server hasn't responded within 2s, show the warm-up banner
+      setShowWakeUpBanner(true);
+    }, 2000);
+
+    api.get('/api/products/?limit=1')
+      .then(() => {
+        clearTimeout(bannerTimer);
+        setServerReady(true);
+        setShowWakeUpBanner(false);
+      })
+      .catch(() => {
+        clearTimeout(bannerTimer);
+        setServerReady(true);
+        setShowWakeUpBanner(false);
+      });
+
+    return () => clearTimeout(bannerTimer);
+  }, []);
 
   return (
     <Router>
       <div className="App">
+        {/* Render free-tier warm-up banner */}
+        {showWakeUpBanner && (
+          <div
+            className="d-flex align-items-center justify-content-center gap-2 text-white py-2 px-3 text-center"
+            style={{ background: '#1a1a2e', fontSize: '13px', position: 'sticky', top: 0, zIndex: 99999 }}
+          >
+            <span className="spinner-border spinner-border-sm" style={{ width: '14px', height: '14px', borderWidth: '2px' }}></span>
+            <span>
+              ⚡ Server is waking up (free tier) — this may take <strong>30–60 seconds</strong> on first load. Please wait…
+            </span>
+          </div>
+        )}
+
         {token && (
           <>
             <header className="bg-black text-white text-center py-2 position-relative" style={{ fontSize: '14px' }}>
