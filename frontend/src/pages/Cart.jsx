@@ -13,7 +13,7 @@ const Cart = () => {
     if (token) dispatch(fetchCart());
   }, [dispatch, token]);
 
-  const total = items.reduce((acc, item) => acc + item.product_details.price * item.quantity, 0);
+  const total = Array.isArray(items) ? items.reduce((acc, item) => acc + item.product_details.price * item.quantity, 0) : 0;
 
   if (!token) return <div className="cart-page">Please login to view your cart.</div>;
 
@@ -22,7 +22,7 @@ const Cart = () => {
       <h1>YOUR CART</h1>
       <div className="cart-content">
         <div className="cart-items">
-          {items.map((item) => (
+          {Array.isArray(items) && items.map((item) => (
             <div key={item.id} className="cart-item">
               <img src={item.product_details.image} alt={item.product_details.name} />
               <div className="item-info">

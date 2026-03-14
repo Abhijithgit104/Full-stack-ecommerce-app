@@ -12,7 +12,7 @@ const ProductSection = ({ title, endpoint, showTitle = true }) => {
     const fetchProducts = async () => {
       try {
         const response = await api.get(`/products/${endpoint}`);
-        const data = response.data;
+        const data = Array.isArray(response.data) ? response.data : [];
         // If endpoint contains 'limit', we trust it. Otherwise show only 4.
         setProducts(endpoint.includes('limit') ? data : data.slice(0, 4));
         setLoading(false);
@@ -32,7 +32,7 @@ const ProductSection = ({ title, endpoint, showTitle = true }) => {
           <div className="loading">Loading products...</div>
         ) : (
           <div className="products-grid">
-            {products.map(product => (
+            {Array.isArray(products) && products.map(product => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>

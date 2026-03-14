@@ -9,7 +9,7 @@ const Orders = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       const response = await api.get('/orders/');
-      setOrders(response.data);
+      setOrders(Array.isArray(response.data) ? response.data : []);
     };
     if (token) fetchOrders();
   }, [token]);
@@ -18,7 +18,7 @@ const Orders = () => {
     <div className="orders-page">
       <h1>Your Orders</h1>
       <div className="orders-list">
-        {orders.map(order => (
+        {Array.isArray(orders) && orders.map(order => (
           <div key={order.id} className="order-card">
             <div className="order-header">
               <span>Order #{order.id}</span>
@@ -26,7 +26,7 @@ const Orders = () => {
               <span className="status">{order.status}</span>
             </div>
             <div className="order-items">
-              {order.items.map(item => (
+              {Array.isArray(order.items) && order.items.map(item => (
                 <div key={item.id} className="item">
                   {item.product_details.name} x {item.quantity} - ${item.price}
                 </div>

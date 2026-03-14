@@ -33,7 +33,7 @@ const Category = () => {
       url += `max_price=${priceRange}&`;
       
       const response = await api.get(url);
-      setProducts(response.data);
+      setProducts(Array.isArray(response.data) ? response.data : []);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching products:", error);
@@ -180,7 +180,7 @@ const Category = () => {
             <div className="loading">Loading products...</div>
           ) : (
             <div className="products-grid">
-              {products.map(product => (
+              {Array.isArray(products) && products.map(product => (
                 <ProductCard key={product.id} product={product} />
               ))}
               {products.length === 0 && <p className="no-products">No products found in this category.</p>}
