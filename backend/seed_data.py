@@ -15,7 +15,7 @@ from products.models import Product
 
 if Product.objects.exists():
     print("Database already has products. Skipping seeding.")
-    exit(0)
+    sys.exit(0)
 
 print("Seeding database...")
 
