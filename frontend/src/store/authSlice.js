@@ -23,11 +23,21 @@ export const register = createAsyncThunk('auth/register', async (userData, { rej
   }
 });
 
+const safeParse = (key) => {
+  const item = localStorage.getItem(key);
+  if (!item || item === 'undefined') return null;
+  try {
+    return JSON.parse(item);
+  } catch (e) {
+    return null;
+  }
+};
+
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
-    user: JSON.parse(localStorage.getItem('user')),
-    token: localStorage.getItem('token'),
+    user: safeParse('user'),
+    token: localStorage.getItem('token') || null,
     loading: false,
     error: null,
   },
