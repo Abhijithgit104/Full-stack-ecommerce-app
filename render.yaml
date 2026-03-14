@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: full_stack_db
+    name: ecomm-api
     env: python
     buildCommand: "./build.sh"
     startCommand: "gunicorn ecomm.wsgi:application"
@@ -32,8 +32,8 @@ services:
       - key: VITE_API_URL
         fromService:
           type: web
-          name: full_stack_db
-          property: host
+          name: ecomm-api
+          property: url
 
 databases:
   - name: full_stack_db
