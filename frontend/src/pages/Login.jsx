@@ -2,13 +2,15 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../store/authSlice';
 import { useNavigate, Link } from 'react-router-dom';
-import { Mail, Lock, LogIn } from 'lucide-react';
+import { Mail, Lock, LogIn, Wifi } from 'lucide-react';
+import { useServer } from '../context/ServerContext';
 
 const Login = () => {
   const [credentials, setCredentials] = useState({ username: '', password: '' });
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, error } = useSelector((state) => state.auth);
+  const { serverReady } = useServer();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -62,13 +64,13 @@ const Login = () => {
 
           {error && <div className="p-3 rounded-4 bg-danger bg-opacity-10 text-danger text-center fs-6 fw-medium">Invalid username or password. Please try again.</div>}
 
-          <button type="submit" className="btn btn-black rounded-pill py-3 px-4 fs-6 fw-semibold d-flex align-items-center justify-content-center gap-2 mt-2" disabled={loading}>
-            {loading ? (
+          <button type="submit" className="btn btn-black rounded-pill py-3 px-4 fs-6 fw-semibold d-flex align-items-center justify-content-center gap-2 mt-2" disabled={loading || !serverReady}>
+            {!serverReady ? (
+              <><span className="spinner-border spinner-border-sm"></span> Connecting to server…</>
+            ) : loading ? (
               <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
             ) : (
-              <>
-                Sign In <LogIn size={18} />
-              </>
+              <> Sign In <LogIn size={18} /></>
             )}
           </button>
         </form>
