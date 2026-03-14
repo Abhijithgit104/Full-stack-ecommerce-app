@@ -50,7 +50,8 @@ class ProductList(generics.ListAPIView):
                 pass
         
         # Log counts for debugging
-        print(f"API Request: filters active, results={queryset.count()}")
+        count = queryset.count()
+        print(f"DEBUG: ProductList request - filters active, results={count}")
         return queryset
 
 class NewArrivalsList(generics.ListAPIView):
