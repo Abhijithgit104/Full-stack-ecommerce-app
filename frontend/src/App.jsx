@@ -21,50 +21,44 @@ function App() {
 
   useEffect(() => {
     let bannerTimer;
-    let retryInterval;
-    let attempts = 0;
-    const MAX_ATTEMPTS = 30; // 30 * 2s = 60 seconds
+    let done = false;
 
-    const pingServer = () => {
-      attempts++;
-      // Step 1: Use mode:'no-cors' to bypass CORS preflight during cold start.
-      // Render's sleeping infrastructure blocks CORS preflight (OPTIONS) but
-      // allows no-cors GET requests, which wakes the Django process.
-      fetch(`${API_BASE_URL}/api/products/?limit=1`, { mode: 'no-cors' })
-        .then(() => {
-          // Step 2: Now try a real CORS-enabled request. If Django is awake
-          // and CORS headers are present, this will succeed.
-          return fetch(`${API_BASE_URL}/api/products/?limit=1`);
-        })
-        .then((res) => {
-          if (res.ok) {
-            clearTimeout(bannerTimer);
-            clearInterval(retryInterval);
-            setShowWakeUpBanner(false);
-          }
-        })
-        .catch(() => {
-          // Django not ready yet — keep retrying
-        });
+    // Show banner if backend takes > 2s to respond
+    bannerTimer = setTimeout(() => setShowWakeUpBanner(true), 2000);
 
-      if (attempts >= MAX_ATTEMPTS) {
-        clearInterval(retryInterval);
-        setShowWakeUpBanner(false); // Give up, let user try anyway
+    const wakeUp = async () => {
+      try {
+        // Step 1: no-cors ping to wake Render's sleeping server (no CORS preflight sent)
+        await fetch(`${API_BASE_URL}/products/`, { mode: 'no-cors' });
+
+        if (done) return;
+
+        // Step 2: Give Django 1s to fully boot after the wake-up tap
+        await new Promise((res) => setTimeout(res, 1000));
+
+        if (done) return;
+
+        // Step 3: Confirm it's truly ready with a normal CORS request
+        await fetch(`${API_BASE_URL}/products/`);
+
+      } catch (_) {
+        // Server may not be fully up — that's OK, user will retry naturally
+      } finally {
+        if (!done) {
+          done = true;
+          clearTimeout(bannerTimer);
+          setShowWakeUpBanner(false);
+        }
       }
     };
 
-    // Show the banner after 2s if backend hasn't responded yet
-    bannerTimer = setTimeout(() => setShowWakeUpBanner(true), 2000);
-
-    // Ping immediately, then every 2s
-    pingServer();
-    retryInterval = setInterval(pingServer, 2000);
+    wakeUp();
 
     return () => {
+      done = true;
       clearTimeout(bannerTimer);
-      clearInterval(retryInterval);
     };
-  }, []);
+  }, []); // Run only once on mount
 
   return (
     <Router>
@@ -76,16 +70,22 @@ function App() {
             className="d-flex align-items-center justify-content-center gap-2 text-white py-2 px-3 text-center"
             style={{ background: '#1a1a2e', fontSize: '13px', position: 'sticky', top: 0, zIndex: 99999 }}
           >
-            <span className="spinner-border spinner-border-sm" style={{ width: '14px', height: '14px', borderWidth: '2px' }}></span>
+            <span
+              className="spinner-border spinner-border-sm"
+              style={{ width: '14px', height: '14px', borderWidth: '2px' }}
+            ></span>
             <span>
-              ⚡ Server is waking up (free tier) — this may take <strong>30–60 seconds</strong> on first load. Please wait…
+              ⚡ Server is waking up (free tier) — first load may take <strong>30–60 seconds</strong>. Please wait…
             </span>
           </div>
         )}
 
         {token && (
           <>
-            <header className="bg-black text-white text-center py-2 position-relative" style={{ fontSize: '14px' }}>
+            <header
+              className="bg-black text-white text-center py-2 position-relative"
+              style={{ fontSize: '14px' }}
+            >
               Sign up and get 20% off to your first order.{' '}
               <a href="#" className="text-white text-decoration-underline fw-medium">Sign Up Now</a>
               <button
