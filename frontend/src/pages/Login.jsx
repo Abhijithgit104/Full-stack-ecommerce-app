@@ -62,7 +62,11 @@ const Login = () => {
             </div>
           </div>
 
-          {error && <div className="p-3 rounded-4 bg-danger bg-opacity-10 text-danger text-center fs-6 fw-medium">Invalid username or password. Please try again.</div>}
+          {error && (
+            <div className="p-3 rounded-4 bg-danger bg-opacity-10 text-danger text-center fs-6 fw-medium">
+              {typeof error === 'string' ? error : (error.detail || error.message || "Invalid username or password. Please try again.")}
+            </div>
+          )}
 
           <button type="submit" className="btn btn-black rounded-pill py-3 px-4 fs-6 fw-semibold d-flex align-items-center justify-content-center gap-2 mt-2" disabled={loading || !serverReady}>
             {!serverReady ? (

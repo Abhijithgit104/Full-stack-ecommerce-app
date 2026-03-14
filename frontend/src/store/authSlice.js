@@ -8,7 +8,7 @@ export const login = createAsyncThunk('auth/login', async (credentials, { reject
     if (response.data.user) localStorage.setItem('user', JSON.stringify(response.data.user));
     return response.data;
   } catch (err) {
-    return rejectWithValue(err.response.data);
+    return rejectWithValue(err.response?.data || { detail: "Server error or timeout. Please check your connection." });
   }
 });
 
@@ -19,7 +19,7 @@ export const register = createAsyncThunk('auth/register', async (userData, { rej
     if (response.data.user) localStorage.setItem('user', JSON.stringify(response.data.user));
     return response.data;
   } catch (err) {
-    return rejectWithValue(err.response.data);
+    return rejectWithValue(err.response?.data || { detail: "Server error or timeout. Please check your connection." });
   }
 });
 

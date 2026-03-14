@@ -80,11 +80,13 @@ const Register = () => {
 
           {error && (
             <div className="p-3 rounded-4 bg-danger bg-opacity-10 text-danger text-center fs-6">
-              {typeof error === 'object'
-                ? Object.entries(error).map(([field, msgs]) => (
-                    <div key={field}><strong>{field}:</strong> {Array.isArray(msgs) ? msgs.join(', ') : msgs}</div>
-                  ))
-                : 'Registration failed. Please check your details.'}
+              {typeof error === 'string' 
+                ? error 
+                : (typeof error === 'object' && error !== null
+                  ? Object.entries(error).map(([field, msgs]) => (
+                      <div key={field}><strong>{field}:</strong> {Array.isArray(msgs) ? msgs.join(', ') : msgs}</div>
+                    ))
+                  : 'Registration failed. Please check your details.')}
             </div>
           )}
 

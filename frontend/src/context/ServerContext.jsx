@@ -14,34 +14,37 @@ export function ServerProvider({ children }) {
     let intervalId;
 
     // Step 1: Fire a no-cors ping to wake Render immediately (non-blocking)
-    fetch(`${API_BASE_URL}/products/`, { mode: 'no-cors' }).catch(() => {});
+    // We add a random query param to bypass any intermediate caches
+    const wakeUpUrl = `${API_BASE_URL}/products/?wake=${Date.now()}`;
+    fetch(wakeUpUrl, { mode: 'no-cors' }).catch(() => {});
 
-    // Step 2: Poll every 3s with a real CORS request to detect when Django is ready
+    // Step 2: Poll with a real CORS request to detect when Django is truly alive
     const checkReady = async () => {
       try {
-        const res = await fetch(`${API_BASE_URL}/products/`, {
-          signal: AbortSignal.timeout(5000), // 5s per attempt timeout
+        const res = await fetch(`${API_BASE_URL}/products/?check=${Date.now()}`, {
+          // Short timeout for the check itself so we can retry frequently
+          signal: AbortSignal.timeout(4000), 
         });
         if (res.ok && !cancelled) {
           setServerReady(true);
           clearInterval(intervalId);
         }
       } catch (_) {
-        // Server not ready yet — keep polling
+        // Still waking up...
       }
     };
 
-    // Start polling after 3s (give server a head start from the no-cors ping)
+    // Start polling almost immediately
     const startTimer = setTimeout(() => {
-      checkReady(); // immediate check
+      checkReady();
       intervalId = setInterval(checkReady, 3000);
 
-      // Give up after 3 minutes — server must be having issues
+      // Force-unblock after 3 minutes just in case
       setTimeout(() => {
         clearInterval(intervalId);
-        if (!cancelled) setServerReady(true); // unblock UI anyway
+        if (!cancelled) setServerReady(true); 
       }, 180000);
-    }, 3000);
+    }, 1000);
 
     return () => {
       cancelled = true;
