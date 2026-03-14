@@ -33,11 +33,17 @@ const safeParse = (key) => {
   }
 };
 
+const getInitialToken = () => {
+  const t = localStorage.getItem('token');
+  if (!t || t === 'null' || t === 'undefined' || t === '') return null;
+  return t;
+};
+
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
     user: safeParse('user'),
-    token: localStorage.getItem('token') || null,
+    token: getInitialToken(),
     loading: false,
     error: null,
   },

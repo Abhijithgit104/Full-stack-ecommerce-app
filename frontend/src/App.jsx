@@ -60,11 +60,11 @@ function AppRoutes() {
           <Route path="/login" element={token ? <Navigate to="/" replace /> : <Login />} />
           <Route path="/product/:id" element={token ? <ProductDetail /> : <Navigate to="/login" replace />} />
           <Route path="/category/:type/:value" element={token ? <Category /> : <Navigate to="/login" replace />} />
-          <Route path="/cart" element={token ? <Cart /> : <Navigate to="/" replace />} />
+          <Route path="/cart" element={token ? <Cart /> : <Navigate to="/login" replace />} />
           <Route path="/checkout" element={token ? <Checkout /> : <Navigate to="/login" replace />} />
           <Route path="/orders" element={token ? <Orders /> : <Navigate to="/login" replace />} />
           <Route path="/success" element={token ? <Success /> : <Navigate to="/login" replace />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="*" element={<Navigate to={token ? "/" : "/login"} replace />} />
         </Routes>
       </main>
 
