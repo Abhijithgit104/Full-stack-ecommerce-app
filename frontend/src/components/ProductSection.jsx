@@ -3,13 +3,17 @@ import axios from 'axios';
 import api from '../services/api';
 import { Link } from 'react-router-dom';
 import ProductCard from './ProductCard';
+import { useServer } from '../context/ServerContext';
 
 const ProductSection = ({ title, endpoint, showTitle = true }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { serverReady } = useServer();
 
   useEffect(() => {
     const fetchProducts = async () => {
+      if (!serverReady) return; // Don't fetch until server is awake
+      
       try {
         const response = await api.get(`/products/${endpoint}`);
         const data = Array.isArray(response.data) ? response.data : [];
@@ -22,7 +26,7 @@ const ProductSection = ({ title, endpoint, showTitle = true }) => {
       }
     };
     fetchProducts();
-  }, [endpoint]);
+  }, [endpoint, serverReady]);
 
   return (
     <section className="py-5">
