@@ -8,20 +8,22 @@ import { useServer } from '../context/ServerContext';
 const ProductSection = ({ title, endpoint, showTitle = true }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const { serverReady } = useServer();
 
   useEffect(() => {
     const fetchProducts = async () => {
-      if (!serverReady) return; // Don't fetch until server is awake
+      if (!serverReady) return;
       
       try {
+        setError(null);
         const response = await api.get(`/products/${endpoint}`);
         const data = Array.isArray(response.data) ? response.data : [];
-        // If endpoint contains 'limit', we trust it. Otherwise show only 4.
         setProducts(endpoint.includes('limit') ? data : data.slice(0, 4));
         setLoading(false);
-      } catch (error) {
-        console.error("Error fetching products:", error);
+      } catch (err) {
+        console.error("Error fetching products:", err);
+        setError(err.response?.data?.detail || err.message || "Failed to load products");
         setLoading(false);
       }
     };
@@ -33,7 +35,15 @@ const ProductSection = ({ title, endpoint, showTitle = true }) => {
       <div className="container">
         {showTitle && <h2 className="text-center mb-5 fw-bolder" style={{ fontSize: 'clamp(32px, 5vw, 48px)', fontFamily: 'Outfit, sans-serif' }}>{title}</h2>}
         {loading ? (
-          <div className="text-center text-secondary py-5">Loading products...</div>
+          <div className="text-center text-secondary py-5">
+            <div className="spinner-border spinner-border-sm me-2"></div>
+            Loading products...
+          </div>
+        ) : error ? (
+          <div className="text-center text-danger py-5">
+            <p>⚠️ {error}</p>
+            <button className="btn btn-sm btn-outline-danger rounded-pill" onClick={() => window.location.reload()}>Retry</button>
+          </div>
         ) : (
           <div className="row g-4 mb-5">
             {Array.isArray(products) && products.map(product => (

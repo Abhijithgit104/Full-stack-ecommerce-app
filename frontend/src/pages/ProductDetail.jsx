@@ -12,7 +12,7 @@ const ProductDetail = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { selectedProduct: product, loading } = useSelector((state) => state.products);
+  const { selectedProduct: product, loading, error } = useSelector((state) => state.products);
   const { token } = useSelector((state) => state.auth);
   const { serverReady } = useServer();
   
@@ -38,7 +38,24 @@ const ProductDetail = () => {
     setShowToast(true);
   };
 
-  if (loading || !product) return <div className="loading-state">Loading...</div>;
+  if (loading || !serverReady) {
+    return (
+      <div className="container py-5 text-center min-vh-50 d-flex flex-column align-items-center justify-content-center">
+        <div className="spinner-border text-dark mb-3" role="status"></div>
+        <p className="text-muted-custom">Loading product details...</p>
+      </div>
+    );
+  }
+
+  if (error || !product) {
+    return (
+      <div className="container py-5 text-center min-vh-50 d-flex flex-column align-items-center justify-content-center">
+        <h2 className="text-danger mb-3">⚠️ Oops!</h2>
+        <p className="text-muted-custom mb-4">{error || "Product not found."}</p>
+        <button className="btn btn-black rounded-pill px-5 py-2" onClick={() => navigate('/')}>Back to Home</button>
+      </div>
+    );
+  }
 
   const colors = [
     { name: 'Brown', value: '#4F4631' },

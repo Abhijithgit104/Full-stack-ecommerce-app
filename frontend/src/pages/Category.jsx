@@ -10,6 +10,7 @@ const Category = () => {
   const { type, value } = useParams();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const { serverReady } = useServer();
   
   // Filter States
@@ -20,6 +21,7 @@ const Category = () => {
 
   const fetchProducts = async () => {
     setLoading(true);
+    setError(null);
     try {
       const queryParams = new URLSearchParams(window.location.search);
       const search = queryParams.get('search');
@@ -37,8 +39,9 @@ const Category = () => {
       const response = await api.get(url);
       setProducts(Array.isArray(response.data) ? response.data : []);
       setLoading(false);
-    } catch (error) {
-      console.error("Error fetching products:", error);
+    } catch (err) {
+      console.error("Error fetching products:", err);
+      setError(err.response?.data?.detail || err.message || "Failed to load products");
       setLoading(false);
     }
   };
@@ -192,7 +195,15 @@ const Category = () => {
           </div>
 
           {loading ? (
-            <div className="text-center py-5 text-muted-custom">Loading products...</div>
+            <div className="text-center py-5 text-muted-custom">
+              <div className="spinner-border spinner-border-sm me-2"></div>
+               Loading products...
+            </div>
+          ) : error ? (
+            <div className="text-center text-danger py-5">
+              <p>⚠️ {error}</p>
+              <button className="btn btn-sm btn-outline-danger rounded-pill" onClick={fetchProducts}>Retry</button>
+            </div>
           ) : (
             <div className="row g-4 mb-5">
               {Array.isArray(products) && products.map(product => (
