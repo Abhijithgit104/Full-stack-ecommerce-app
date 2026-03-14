@@ -9,6 +9,9 @@ from products.models import Product
 # Clear existing products
 Product.objects.all().delete()
 
+# Design Assets
+HERO_IMAGE_URL = "/images/hero.png"
+
 products_data = [
     # New Arrivals
     {

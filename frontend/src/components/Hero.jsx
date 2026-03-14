@@ -1,4 +1,3 @@
-import React from 'react';
 
 const Hero = () => {
   return (
@@ -34,9 +33,15 @@ const Hero = () => {
           </div>
         </div>
         
-        <div className="flex-grow-1 position-relative w-100" style={{ flexBasis: '50%', height: '663px', backgroundImage: "url('https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1000&auto=format&fit=crop')", backgroundSize: 'cover', backgroundPosition: 'center bottom' }}>
-          <div className="position-absolute text-black" style={{ top: '300px', left: '50px', fontSize: '44px' }}>✦</div>
-          <div className="position-absolute text-black" style={{ top: '100px', right: '50px', fontSize: '80px' }}>✦</div>
+        <div className="flex-grow-1 position-relative w-100 hero-image-container" style={{ 
+          flexBasis: '50%', 
+          height: '663px', 
+          backgroundImage: "url('/images/hero.png')", 
+          backgroundSize: 'cover', 
+          backgroundPosition: 'center' 
+        }}>
+          <div className="position-absolute text-black d-none d-md-block" style={{ top: '300px', left: '50px', fontSize: '44px' }}>✦</div>
+          <div className="position-absolute text-black d-none d-md-block" style={{ top: '100px', right: '50px', fontSize: '80px' }}>✦</div>
         </div>
       </div>
 

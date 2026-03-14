@@ -71,7 +71,13 @@ const Login = () => {
 
           {error && (
             <div className="p-3 rounded-4 bg-danger bg-opacity-10 text-danger text-center fs-6 fw-medium">
-              {typeof error === 'string' ? error : (error.detail || error.message || "Invalid username or password. Please try again.")}
+              {typeof error === 'string' 
+                ? error 
+                : (typeof error === 'object' && error !== null
+                  ? Object.entries(error).map(([field, msgs]) => (
+                      <div key={field}><strong>{field}:</strong> {Array.isArray(msgs) ? msgs.join(', ') : msgs}</div>
+                    ))
+                  : 'Invalid username or password. Please try again.')}
             </div>
           )}
 

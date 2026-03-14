@@ -21,7 +21,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top py-3">
+    <nav className="navbar navbar-expand-lg navbar-light glass-nav sticky-top py-3">
       <div className="container">
         <button className="navbar-toggler border-0 ps-0 pe-2" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
           <Menu size={24} />
