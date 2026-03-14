@@ -3,7 +3,7 @@ services:
     name: ecomm-api
     env: python
     buildCommand: "./build.sh"
-    startCommand: "gunicorn ecomm.wsgi:application"
+    startCommand: "gunicorn ecomm.wsgi:application --workers 1 --threads 2 --preload --timeout 120"
     rootDir: backend
     plan: free
     envVars:

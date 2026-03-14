@@ -21,31 +21,19 @@ function App() {
 
   useEffect(() => {
     let bannerTimer;
-    let done = false;
+    let cancelled = false;
 
-    // Show banner if backend takes > 2s to respond
-    bannerTimer = setTimeout(() => setShowWakeUpBanner(true), 2000);
+    // Show banner after 1.5s if backend hasn't responded
+    bannerTimer = setTimeout(() => setShowWakeUpBanner(true), 1500);
 
     const wakeUp = async () => {
       try {
-        // Step 1: no-cors ping to wake Render's sleeping server (no CORS preflight sent)
+        // no-cors bypasses CORS preflight — safely wakes Render's sleeping server
         await fetch(`${API_BASE_URL}/products/`, { mode: 'no-cors' });
-
-        if (done) return;
-
-        // Step 2: Give Django 1s to fully boot after the wake-up tap
-        await new Promise((res) => setTimeout(res, 1000));
-
-        if (done) return;
-
-        // Step 3: Confirm it's truly ready with a normal CORS request
-        await fetch(`${API_BASE_URL}/products/`);
-
       } catch (_) {
-        // Server may not be fully up — that's OK, user will retry naturally
+        // Ignore — wake-up attempt done regardless
       } finally {
-        if (!done) {
-          done = true;
+        if (!cancelled) {
           clearTimeout(bannerTimer);
           setShowWakeUpBanner(false);
         }
@@ -55,16 +43,16 @@ function App() {
     wakeUp();
 
     return () => {
-      done = true;
+      cancelled = true;
       clearTimeout(bannerTimer);
     };
-  }, []); // Run only once on mount
+  }, []); // Runs once on mount only
 
   return (
     <Router>
       <div className="App">
 
-        {/* Render free-tier cold-start banner */}
+        {/* Cold-start banner for Render free tier */}
         {showWakeUpBanner && (
           <div
             className="d-flex align-items-center justify-content-center gap-2 text-white py-2 px-3 text-center"
