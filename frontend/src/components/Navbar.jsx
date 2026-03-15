@@ -21,7 +21,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light glass-nav sticky-top py-3">
+    <nav className="navbar navbar-expand-lg navbar-light glass-nav sticky-top py-3" style={{ zIndex: 1100 }}>
       <div className="container">
         <button className="navbar-toggler border-0 ps-0 pe-2" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
           <Menu size={24} />
@@ -75,8 +75,10 @@ const Navbar = () => {
               {showUserMenu && (
                 <div className="dropdown-menu dropdown-menu-end show shadow-lg border-0 rounded-4 animate-fade-in py-2" style={{ top: '100%', right: 0 }}>
                   <div className="px-3 py-2">
-                    <p className="fw-bold mb-0" style={{ fontSize: '14px' }}>{user?.username}</p>
-                    <p className="text-secondary mb-0" style={{ fontSize: '12px' }}>{user?.email}</p>
+                    <p className="fw-bold mb-0 text-capitalize" style={{ fontSize: '14px' }}>
+                      {user?.username || user?.first_name || 'User'}
+                    </p>
+                    <p className="text-secondary mb-0" style={{ fontSize: '12px' }}>{user?.email || 'No email'}</p>
                   </div>
                   <li><hr className="dropdown-divider" /></li>
                   <button className="dropdown-item fw-semibold text-danger" onClick={() => { dispatch(logout()); navigate('/login'); }}>

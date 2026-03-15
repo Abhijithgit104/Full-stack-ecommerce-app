@@ -38,7 +38,7 @@ const Login = () => {
 
         <form onSubmit={handleSubmit} className="d-flex flex-column gap-4">
           <div>
-            <label className="form-label fw-medium text-black fs-6 mb-2">Username</label>
+            <label className="form-label fw-medium text-black fs-6 mb-2">Username or Email</label>
             <div className="input-group bg-light rounded-pill p-1 border border-transparent focus-within-border-black transition-all">
               <span className="input-group-text bg-transparent border-0 pe-2 ps-3 text-muted-custom">
                 <Mail size={18} />
@@ -46,7 +46,7 @@ const Login = () => {
               <input 
                 type="text" 
                 className="form-control bg-transparent border-0 shadow-none ps-0 fs-6" 
-                placeholder="Enter your username" 
+                placeholder="Enter your username or email" 
                 required
                 onChange={(e) => setCredentials({ ...credentials, username: e.target.value })} 
               />

@@ -10,6 +10,14 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
+        username = attrs.get("username")
+        if username and "@" in username:
+            try:
+                user = User.objects.get(email=username)
+                attrs["username"] = user.username
+            except User.DoesNotExist:
+                pass
+                
         data = super().validate(attrs)
         data['user'] = UserSerializer(self.user).data
         return data

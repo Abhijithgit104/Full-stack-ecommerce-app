@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { CheckCircle, X } from 'lucide-react';
 
-const Toast = ({ message, show, onClose }) => {
+const Toast = ({ title = "Success", message, show, onClose, variant = "success" }) => {
   useEffect(() => {
     if (show) {
       const timer = setTimeout(() => {
@@ -15,11 +15,11 @@ const Toast = ({ message, show, onClose }) => {
     <div className="position-fixed" style={{ top: '32px', right: '32px', zIndex: 999999, pointerEvents: 'none' }}>
       <div className={`toast-card ${show ? 'active' : ''}`}>
         <div className="d-flex align-items-center p-3 gap-3">
-          <div className="bg-black text-white rounded-3 d-flex align-items-center justify-content-center shadow-sm flex-shrink-0" style={{ width: '44px', height: '44px' }}>
+          <div className={`${variant === 'danger' ? 'bg-danger' : 'bg-black'} text-white rounded-3 d-flex align-items-center justify-content-center shadow-sm flex-shrink-0`} style={{ width: '44px', height: '44px' }}>
             <CheckCircle size={20} />
           </div>
           <div className="flex-grow-1">
-            <h4 className="m-0 text-black fw-bold" style={{ fontFamily: 'Outfit, sans-serif', fontSize: '16px' }}>Added to Cart</h4>
+            <h4 className="m-0 text-black fw-bold" style={{ fontFamily: 'Outfit, sans-serif', fontSize: '16px' }}>{title}</h4>
             <p className="m-0 mt-1 fw-medium text-black-50" style={{ fontSize: '13px' }}>{message}</p>
           </div>
           <button className="btn btn-light bg-secondary-custom p-0 d-flex align-items-center justify-content-center text-secondary toast-close-btn flex-shrink-0" onClick={onClose} style={{ width: '32px', height: '32px', borderRadius: '10px', transition: '0.3s' }}>
@@ -27,7 +27,7 @@ const Toast = ({ message, show, onClose }) => {
           </button>
         </div>
         <div className="w-100" style={{ height: '3px', background: 'rgba(0,0,0,0.05)' }}>
-          <div className="h-100 bg-black toast-progress-bar" />
+          <div className={`h-100 ${variant === 'danger' ? 'bg-danger' : 'bg-black'} toast-progress-bar`} />
         </div>
       </div>
 

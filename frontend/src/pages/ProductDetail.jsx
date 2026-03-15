@@ -292,6 +292,7 @@ const ProductDetail = () => {
         }
       `}</style>
       <Toast 
+        title="Added to Cart"
         message={`${product.name} added to cart!`} 
         show={showToast} 
         onClose={() => setShowToast(false)} 

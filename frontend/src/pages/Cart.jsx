@@ -1,8 +1,10 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCart, removeFromCart } from '../store/cartSlice';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useServer } from '../context/ServerContext';
+import Toast from '../components/Toast';
+import { Trash2 } from 'lucide-react';
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -10,10 +12,18 @@ const Cart = () => {
   const { items, loading } = useSelector((state) => state.cart);
   const { token } = useSelector((state) => state.auth);
   const { serverReady } = useServer();
+  const [showToast, setShowToast] = React.useState(false);
+  const [toastMessage, setToastMessage] = React.useState('');
 
   useEffect(() => {
     if (token && serverReady) dispatch(fetchCart());
   }, [dispatch, token, serverReady]);
+
+  const handleDelete = (itemId, itemName) => {
+    dispatch(removeFromCart(itemId));
+    setToastMessage(`${itemName} removed from cart`);
+    setShowToast(true);
+  };
 
   const total = Array.isArray(items) ? items.reduce((acc, item) => acc + item.product_details.price * item.quantity, 0) : 0;
 
@@ -40,15 +50,12 @@ const Cart = () => {
                     <p className="fs-5 fw-bold mb-0">${item.product_details.price}</p>
                   </div>
                   <button 
-                    onClick={() => dispatch(removeFromCart(item.id))}
+                    onClick={() => handleDelete(item.id, item.product_details.name)}
                     className="btn btn-outline-danger rounded-circle p-2 d-flex align-items-center justify-content-center flex-shrink-0"
                     style={{ width: '40px', height: '40px' }}
                     title="Remove item"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                      <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
-                      <path fillRule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
-                    </svg>
+                    <Trash2 size={18} />
                   </button>
                 </div>
               ))}
@@ -89,6 +96,13 @@ const Cart = () => {
           </div>
         </div>
       )}
+      <Toast 
+        title="Item Deleted"
+        message={toastMessage}
+        show={showToast}
+        onClose={() => setShowToast(false)}
+        variant="danger"
+      />
     </div>
   );
 };

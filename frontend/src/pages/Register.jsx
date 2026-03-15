@@ -31,7 +31,7 @@ const Register = () => {
 
         <form onSubmit={handleSubmit} className="d-flex flex-column gap-4">
           <div>
-            <label className="form-label fw-medium text-black fs-6 mb-2">Full Name</label>
+            <label className="form-label fw-medium text-black fs-6 mb-2">Username</label>
             <div className="input-group bg-light rounded-pill p-1 border border-transparent focus-within-border-black transition-all">
               <span className="input-group-text bg-transparent border-0 pe-2 ps-3 text-muted-custom">
                 <User size={18} />
@@ -39,7 +39,7 @@ const Register = () => {
               <input 
                 type="text" 
                 className="form-control bg-transparent border-0 shadow-none ps-0 fs-6" 
-                placeholder="Enter your name" 
+                placeholder="Enter your username" 
                 required
                 onChange={(e) => setUserData({ ...userData, username: e.target.value })} 
               />
@@ -71,7 +71,7 @@ const Register = () => {
               <input 
                 type="password" 
                 className="form-control bg-transparent border-0 shadow-none ps-0 fs-6" 
-                placeholder="••••••••" 
+                placeholder="Min. 8 chars, 1 number, 1 special" 
                 required
                 onChange={(e) => setUserData({ ...userData, password: e.target.value })} 
               />
