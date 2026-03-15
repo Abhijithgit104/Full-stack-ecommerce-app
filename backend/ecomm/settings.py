@@ -112,6 +112,14 @@ if os.environ.get('DATABASE_URL'):
             ssl_require=True
         )
     }
+elif os.environ.get('RENDER'):
+    # SQLite fallback specifically to allow Render's build step (e.g. collectstatic) to pass without DB connect errors
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 else:
     # Localhost (Uses your local Postgres database)
     DATABASES = {
