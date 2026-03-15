@@ -110,8 +110,7 @@ if os.environ.get('DATABASE_URL'):
     # Render/Production (uses Postgres via URL)
     DATABASES = {
         'default': dj_database_url.config(
-            conn_max_age=600,
-            ssl_require=True
+            conn_max_age=600
         )
     }
 elif os.environ.get('RENDER'):
@@ -164,7 +163,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     FRONTEND_DIR / 'dist'
