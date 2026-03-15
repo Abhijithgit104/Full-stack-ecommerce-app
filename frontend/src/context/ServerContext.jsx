@@ -4,7 +4,7 @@ const ServerContext = createContext({ serverReady: false });
 
 export const useServer = () => useContext(ServerContext);
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const API_BASE_URL = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:8000' : '');
 console.log("DEBUG: Connecting to Backend at:", API_BASE_URL);
 
 export function ServerProvider({ children }) {
