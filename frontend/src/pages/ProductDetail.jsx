@@ -279,7 +279,7 @@ const ProductDetail = () => {
       {/* Suggestions Section */}
       <div className="mb-5">
         <h2 className="text-center fw-bolder mb-5" style={{ fontSize: 'clamp(32px, 5vw, 48px)' }}>YOU MIGHT ALSO LIKE</h2>
-        <ProductSection endpoint="top-selling/" showTitle={false} />
+        <ProductSection endpoint="?category=top_selling&limit=4" showTitle={false} viewAllLink="top_selling" />
       </div>
 
       <style>{`

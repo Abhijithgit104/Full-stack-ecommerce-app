@@ -32,10 +32,13 @@ class ProductList(generics.ListAPIView):
         if product_type:
             queryset = queryset.filter(product_type__iexact=product_type)
             
-        if min_price:
-            queryset = queryset.filter(price__gte=min_price)
-        if max_price:
-            queryset = queryset.filter(price__lte=max_price)
+        try:
+            if min_price:
+                queryset = queryset.filter(price__gte=float(min_price))
+            if max_price:
+                queryset = queryset.filter(price__lte=float(max_price))
+        except ValueError:
+            pass # Ignore invalid price filters safely
             
         if size:
             queryset = queryset.filter(sizes__icontains=size)
@@ -53,14 +56,6 @@ class ProductList(generics.ListAPIView):
         count = queryset.count()
         print(f"DEBUG: ProductList request - filters active, results={count}")
         return queryset
-
-class NewArrivalsList(generics.ListAPIView):
-    queryset = Product.objects.filter(category='new_arrival')
-    serializer_class = ProductSerializer
-
-class TopSellingList(generics.ListAPIView):
-    queryset = Product.objects.filter(category='top_selling')
-    serializer_class = ProductSerializer
 
 class ProductDetail(generics.RetrieveAPIView):
     queryset = Product.objects.all()

@@ -9,10 +9,10 @@ const Home = () => {
     <>
       <Hero />
       <div id="new-arrivals">
-        <ProductSection title="NEW ARRIVALS" endpoint="new-arrivals/" />
+        <ProductSection title="NEW ARRIVALS" endpoint="?category=new_arrival&limit=4" viewAllLink="new_arrival" />
       </div>
       <div className="container border-bottom border-secondary border-opacity-25"></div>
-      <ProductSection title="TOP SELLING" endpoint="top-selling/" />
+      <ProductSection title="TOP SELLING" endpoint="?category=top_selling&limit=4" viewAllLink="top_selling" />
       <DressStyle />
       <Reviews />
     </>

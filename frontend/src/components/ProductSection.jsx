@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import ProductCard from './ProductCard';
 import { useServer } from '../context/ServerContext';
 
-const ProductSection = ({ title, endpoint, showTitle = true }) => {
+const ProductSection = ({ title, endpoint, showTitle = true, viewAllLink = null }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -55,7 +55,7 @@ const ProductSection = ({ title, endpoint, showTitle = true }) => {
         )}
         <div className="text-center">
           <Link 
-            to={`/category/category/${endpoint.replace('/', '')}`} 
+            to={viewAllLink ? `/category/category/${viewAllLink}` : `/category/category/${endpoint.replace('/', '')}`} 
             className="btn btn-outline-dark rounded-pill px-5 py-3 fw-medium" 
           >
             View All
