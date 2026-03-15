@@ -1,12 +1,6 @@
 from django.http import JsonResponse
 from django.db import connection
 
-def home(request):
-    return JsonResponse({
-        "message": "Welcome to the E-commerce API",
-        "docs": "Access /products/, /auth/, /cart/, or /orders/"
-    })
-
 def health_check(request):
     try:
         # Perform a simple DB query to ensure connection is live
