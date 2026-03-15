@@ -1,9 +1,10 @@
 from django.contrib import admin
 from django.urls import path, include
 from orders.views import CartView, OrderList
-from .views import health_check
+from .views import health_check, home
 
 urlpatterns = [
+    path('', home, name='home'),
     path('health/', health_check, name='health'),
     path('admin/', admin.site.urls),
     path('products/', include('products.urls')),
