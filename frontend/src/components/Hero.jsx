@@ -36,7 +36,7 @@ const Hero = () => {
         <div className="flex-grow-1 position-relative w-100 hero-image-container" style={{ 
           flexBasis: '50%', 
           height: '663px', 
-          backgroundImage: "url('/images/hero.png')", 
+          backgroundImage: "url('https://www.panaprium.com/cdn/shop/articles/how_to_dress_well_casual_men_1000.jpg?v=1623126440')", 
           backgroundSize: 'cover', 
           backgroundPosition: 'center' 
         }}>

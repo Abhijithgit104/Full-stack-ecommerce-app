@@ -21,9 +21,6 @@ print("Seeding database...")
 
 
 
-# Design Assets
-HERO_IMAGE_URL = "/images/hero.png"
-
 products_data = [
     # New Arrivals
     {
